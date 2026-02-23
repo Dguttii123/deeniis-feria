@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎡 FeriaVirtual Pro 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #06050F;
+  --surface:  #0F0E20;
+  --surface2: #1A1835;
+  --gold:     #FFD166;
+  --red:      #EF476F;
+  --teal:     #06D6A0;
+  --blue:     #118AB2;
+  --orange:   #FF6B35;
+  --purple:   #A855F7;
+  --pink:     #F72585;
+  --text:     #EEF0FF;
+  --muted:    rgba(238,240,255,0.55);
+  --border:   rgba(255,255,255,0.08);
+  --r:        14px;
+  --shadow:   0 20px 60px rgba(0,0,0,0.6);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Quicksand',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,.brand{font-family:'Baloo 2',cursive;}
+
+/* ============ SCROLLBAR ============ */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px;}
+
+/* ============ STARS BG ============ */
+#starsBg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,2s) infinite alternate;}
+@keyframes twinkle{from{opacity:.1}to{opacity:.9}}
+
+/* ============ CURSOR ============ */
+.cursor{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--gold);
+  position:fixed;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .08s;
+  mix-blend-mode:difference;
+}
+
+/* ============ LAYOUT ============ */
+#app{position:relative;z-index:1;min-height:100vh;}
+
+/* ============ SCREENS ============ */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:block;}
+
+/* ============ LANDING ============ */
+#landing{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:40px 20px;
+  text-align:center;
+}
+#landing.active{display:flex;}
+
+.landing-glow{
+  position:absolute;
+  width:600px;height:600px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(168,85,247,0.15) 0%, transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+
+.big-logo{
+  font-size:clamp(3.5rem,9vw,7rem);
+  color:var(--gold);
+  text-shadow: 0 0 40px rgba(255,209,102,.5), 0 4px 0 rgba(200,130,0,.5);
+  line-height:1.1;
+  animation:logoPulse 3s ease-in-out infinite alternate;
+}
+@keyframes logoPulse{
+  from{text-shadow:0 0 30px rgba(255,209,102,.4), 0 4px 0 rgba(200,130,0,.5);}
+  to  {text-shadow:0 0 80px rgba(255,209,102,.8), 0 4px 0 rgba(200,130,0,.5), 0 0 120px rgba(239,71,111,.3);}
+}
+.big-sub{
+  font-size:clamp(1rem,2.5vw,1.4rem);
+  color:var(--muted);
+  letter-spacing:4px;
+  text-transform:uppercase;
+  margin:10px 0 40px;
+}
+
+.landing-cards{
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+  justify-content:center;
+  max-width:700px;
+}
+
+.role-card{
+  flex:1;min-width:240px;
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:24px;
+  padding:36px 24px;
+  cursor:pointer;
+  transition:transform .3s, border-color .3s, box-shadow .3s;
+  position:relative;
+  overflow:hidden;
+}
+.role-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:var(--gradient,transparent);
+  opacity:0;
+  transition:opacity .3s;
+}
+.role-card:hover{transform:translateY(-8px) scale(1.02);}
+.role-card:hover::before{opacity:.1;}
+.role-card:hover{border-color:var(--accent,var(--gold));box-shadow:0 0 40px rgba(255,209,102,.15);}
+.role-card .icon{font-size:3.5rem;display:block;margin-bottom:16px;}
+.role-card h3{font-size:1.4rem;margin-bottom:8px;}
+.role-card p{color:var(--muted);font-size:.9rem;line-height:1.5;}
+.role-badge{
+  display:inline-block;
+  background:var(--accent,var(--gold));
+  color:#000;
+  font-size:.75rem;
+  font-weight:700;
+  padding:4px 12px;
+  border-radius:20px;
+  margin-top:14px;
+}
+
+/* ============ AUTH SCREENS ============ */
+.auth-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+.auth-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:40px;
+  width:100%;
+  max-width:480px;
+  box-shadow:var(--shadow);
+  animation:slideUp .4s cubic-bezier(.17,.67,.56,1.3);
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.auth-back{
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  font-size:.9rem;font-family:'Quicksand',sans-serif;
+  display:flex;align-items:center;gap:6px;margin-bottom:24px;
+  transition:color .2s;
+}
+.auth-back:hover{color:var(--text);}
+.auth-title{font-size:1.8rem;margin-bottom:6px;}
+.auth-sub{color:var(--muted);font-size:.9rem;margin-bottom:28px;}
+
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:var(--muted);}
+.form-input,.form-select,.form-textarea{
+  width:100%;
+  background:var(--surface2);
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  padding:12px 16px;
+  color:var(--text);
+  font-family:'Quicksand',sans-serif;
+  font-size:.95rem;
+  transition:border-color .2s, box-shadow .2s;
+  outline:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(168,85,247,.15);
+}
+.form-select option{background:#1A1835;}
+.form-textarea{min-height:90px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 28px;
+  border:none;border-radius:12px;
+  font-family:'Quicksand',sans-serif;
+  font-size:.95rem;font-weight:700;
+  cursor:pointer;
+  transition:transform .2s, filter .2s, box-shadow .2s;
+  text-decoration:none;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1);}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--purple);color:#fff;}
+.btn-gold{background:var(--gold);color:#000;}
+.btn-teal{background:var(--teal);color:#000;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text);}
+.btn-full{width:100%;margin-top:8px;}
+.btn-sm{padding:8px 18px;font-size:.85rem;border-radius:8px;}
+
+.form-hint{font-size:.8rem;color:var(--muted);margin-top:6px;}
+.form-divider{text-align:center;color:var(--muted);font-size:.85rem;margin:16px 0;position:relative;}
+.form-divider::before,.form-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border);}
+.form-divider::before{left:0;}.form-divider::after{right:0;}
+
+.error-msg{
+  background:rgba(239,71,111,.15);
+  border:1px solid rgba(239,71,111,.3);
+  color:var(--red);
+  padding:10px 14px;border-radius:8px;
+  font-size:.85rem;margin-bottom:14px;
+  display:none;
+}
+.error-msg.show{display:block;}
+
+/* ============ NAV ============ */
+.navbar{
+  position:sticky;top:0;z-index:200;
+  background:rgba(6,5,15,.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:12px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.nav-brand{font-size:1.4rem;color:var(--gold);font-family:'Baloo 2',cursive;}
+.nav-spacer{flex:1;}
+.nav-user{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:40px;
+  padding:6px 16px 6px 6px;
+  cursor:pointer;
+}
+.nav-avatar{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  background:var(--purple);
+}
+.nav-name{font-size:.9rem;font-weight:600;}
+.nav-points{
+  background:var(--gold);color:#000;
+  font-size:.75rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+}
+.nav-tab{
+  background:none;border:none;color:var(--muted);
+  font-family:'Quicksand',sans-serif;font-size:.9rem;font-weight:600;
+  cursor:pointer;padding:8px 14px;border-radius:8px;
+  transition:color .2s,background .2s;
+}
+.nav-tab:hover{color:var(--text);background:var(--surface);}
+.nav-tab.active{color:var(--gold);background:rgba(255,209,102,.1);}
+
+/* ============ FAIR MAIN ============ */
+#fairMain{display:none;}
+#fairMain.active{display:block;}
+
+.fair-hero{
+  background:linear-gradient(180deg, rgba(168,85,247,.15) 0%, transparent 100%);
+  padding:40px 24px 24px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+}
+.fair-hero h1{font-size:clamp(2rem,5vw,3rem);color:var(--gold);}
+.fair-hero p{color:var(--muted);margin-top:8px;}
+
+/* Welcome back banner */
+.welcome-banner{
+  background:linear-gradient(135deg, rgba(6,214,160,.15), rgba(168,85,247,.15));
+  border:1px solid rgba(6,214,160,.3);
+  border-radius:16px;
+  padding:16px 24px;
+  margin:20px auto;
+  max-width:900px;
+  display:flex;align-items:center;gap:16px;
+  animation:slideDown .5s ease-out;
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.wb-icon{font-size:2.5rem;}
+.wb-text{flex:1;}
+.wb-title{font-weight:700;color:var(--teal);font-size:1.05rem;}
+.wb-sub{color:var(--muted);font-size:.85rem;margin-top:2px;}
+.wb-reward{
+  background:var(--gold);color:#000;
+  padding:8px 18px;border-radius:20px;
+  font-weight:800;font-size:.9rem;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:transform .2s;
+}
+.wb-reward:hover{transform:scale(1.05);}
+
+/* Daily bonus */
+.streak-bar{
+  display:flex;justify-content:center;gap:8px;
+  padding:16px;flex-wrap:wrap;
+}
+.streak-day{
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;
+  transition:all .3s;
+  position:relative;
+}
+.streak-day.done{border-color:var(--gold);background:rgba(255,209,102,.15);}
+.streak-day.today{border-color:var(--teal);background:rgba(6,214,160,.15);animation:streakPulse 1.5s infinite alternate;}
+@keyframes streakPulse{from{box-shadow:0 0 0 0 rgba(6,214,160,.3)}to{box-shadow:0 0 0 8px rgba(6,214,160,0)}}
+.streak-label{font-size:.6rem;position:absolute;bottom:-18px;color:var(--muted);white-space:nowrap;}
+
+/* ============ FAIR GRID ============ */
+.section-wrap{max-width:1200px;margin:0 auto;padding:24px;}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.section-title{font-size:1.4rem;color:var(--gold);}
+.section-sub{color:var(--muted);font-size:.85rem;margin-top:2px;}
+
+.stands-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+.stand-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .3s, box-shadow .3s, border-color .3s;
+  animation:cardIn .5s ease-out backwards;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.stand-card:hover{
+  transform:translateY(-6px);
+  border-color:var(--accent,var(--purple));
+  box-shadow:0 16px 48px rgba(0,0,0,.5), 0 0 24px rgba(168,85,247,.1);
+}
+.stand-banner{
+  height:120px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.stand-banner-emoji{font-size:3.5rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));}
+.stand-category-badge{
+  position:absolute;top:10px;right:10px;
+  font-size:.7rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:1px;
+}
+.stand-body{padding:16px;}
+.stand-name{font-size:1.1rem;font-weight:700;margin-bottom:4px;}
+.stand-vendor{font-size:.8rem;color:var(--muted);margin-bottom:8px;}
+.stand-desc{font-size:.85rem;color:var(--muted);line-height:1.5;margin-bottom:12px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.stand-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--border);
+  padding-top:12px;margin-top:4px;
+}
+.stand-rating{color:var(--gold);font-size:.85rem;}
+.stand-visits{color:var(--muted);font-size:.8rem;}
+.stand-btn{padding:8px 16px;border-radius:8px;font-size:.8rem;}
+
+/* ============ SEARCH + FILTERS ============ */
+.search-bar{
+  display:flex;gap:12px;
+  max-width:900px;margin:0 auto 24px;
+  flex-wrap:wrap;
+}
+.search-input{
+  flex:1;min-width:200px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:12px 18px;
+  color:var(--text);
+  font-family:'Quicksand',sans-serif;
+  font-size:.95rem;
+  outline:none;
+  transition:border-color .2s;
+}
+.search-input:focus{border-color:var(--purple);}
+.filter-chips{
+  display:flex;gap:8px;flex-wrap:wrap;
+  max-width:900px;margin:0 auto 20px;
+}
+.chip{
+  padding:6px 16px;border-radius:20px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  color:var(--muted);font-size:.85rem;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.chip:hover,.chip.active{
+  background:rgba(168,85,247,.2);
+  border-color:var(--purple);
+  color:var(--text);
+}
+
+/* ============ STAND DETAIL MODAL ============ */
+.modal-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.85);
+  z-index:500;
+  backdrop-filter:blur(8px);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  overflow-y:auto;
+}
+.modal-overlay.open{display:flex;animation:fadeIn .3s;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;
+  width:100%;max-width:640px;
+  position:relative;
+  animation:modalIn .4s cubic-bezier(.17,.67,.56,1.3);
+  overflow:hidden;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal-close{
+  position:absolute;top:14px;right:18px;
+  background:rgba(0,0,0,.5);border:none;
+  color:rgba(255,255,255,.7);font-size:1.4rem;
+  width:36px;height:36px;border-radius:50%;
+  cursor:pointer;transition:all .2s;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{color:#fff;background:rgba(239,71,111,.5);}
+.modal-banner{
+  height:180px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:5rem;
+  position:relative;
+}
+.modal-body{padding:24px;}
+.modal-name{font-size:1.6rem;margin-bottom:4px;}
+.modal-meta{color:var(--muted);font-size:.85rem;margin-bottom:16px;}
+.modal-desc{color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.modal-products{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin-bottom:20px;
+}
+.product-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;padding:14px;
+  transition:all .2s;cursor:pointer;
+}
+.product-card:hover{border-color:var(--purple);transform:scale(1.02);}
+.product-emoji{font-size:2rem;margin-bottom:6px;}
+.product-name{font-weight:700;font-size:.9rem;margin-bottom:2px;}
+.product-price{color:var(--gold);font-size:.85rem;}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.rating-stars{display:flex;gap:4px;margin-bottom:14px;}
+.rating-star{font-size:1.4rem;cursor:pointer;transition:transform .2s;filter:grayscale(1);}
+.rating-star.active,.rating-star:hover~.rating-star~.rating-star~.rating-star,.rating-star:hover~.rating-star~.rating-star,.rating-star:hover~.rating-star,.rating-star:hover{filter:none;}
+.rating-stars:hover .rating-star{filter:none;}
+.rating-stars .rating-star{filter:none;}
+
+/* ============ ENTREPRENEUR DASHBOARD ============ */
+.dash-wrap{max-width:1100px;margin:0 auto;padding:24px;}
+.dash-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;margin-bottom:28px;
+}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:20px;
+  display:flex;align-items:center;gap:14px;
+}
+.stat-icon{font-size:2rem;}
+.stat-val{font-family:'Baloo 2',cursive;font-size:1.8rem;color:var(--gold);line-height:1;}
+.stat-lbl{font-size:.8rem;color:var(--muted);margin-top:2px;}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:20px;}
+@media(max-width:700px){.dash-grid{grid-template-columns:1fr;}}
+
+.dash-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:20px;
+}
+.dash-panel h3{font-size:1.1rem;margin-bottom:16px;color:var(--gold);}
+
+.product-list-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.product-list-item:last-child{border-bottom:none;}
+.pli-emoji{font-size:1.5rem;}
+.pli-name{font-weight:600;font-size:.9rem;}
+.pli-price{color:var(--gold);font-size:.8rem;}
+.pli-actions{margin-left:auto;display:flex;gap:6px;}
+
+.visit-log{max-height:200px;overflow-y:auto;}
+.visit-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;border-bottom:1px solid var(--border);
+  font-size:.85rem;
+}
+.visit-item:last-child{border-bottom:none;}
+.visit-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:100px;}
+.chart-bar{
+  flex:1;border-radius:4px 4px 0 0;
+  background:linear-gradient(180deg,var(--purple),rgba(168,85,247,.3));
+  min-height:4px;
+  transition:height .5s;
+  position:relative;cursor:pointer;
+}
+.chart-bar:hover::after{
+  content:attr(data-val);
+  position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  background:var(--surface2);padding:2px 6px;border-radius:4px;
+  font-size:.7rem;white-space:nowrap;color:var(--text);
+}
+.chart-labels{display:flex;gap:6px;margin-top:6px;}
+.chart-labels span{flex:1;text-align:center;font-size:.65rem;color:var(--muted);}
+
+/* ============ VISITOR PROFILE ============ */
+.profile-wrap{max-width:800px;margin:0 auto;padding:24px;}
+.profile-hero{
+  background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(247,37,133,.2));
+  border:1px solid var(--border);
+  border-radius:20px;padding:30px;
+  display:flex;gap:24px;align-items:center;
+  margin-bottom:24px;flex-wrap:wrap;
+}
+.profile-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;
+  border:3px solid var(--gold);
+  flex-shrink:0;
+}
+.profile-info h2{font-size:1.6rem;}
+.profile-info p{color:var(--muted);font-size:.9rem;margin-top:4px;}
+.profile-badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.badge{
+  display:flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--border);
+  border-radius:20px;padding:4px 12px;
+  font-size:.75rem;font-weight:600;
+}
+
+.points-card{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--gold);
+  border-radius:16px;padding:20px;
+  text-align:center;
+  margin-left:auto;
+}
+.points-num{font-family:'Baloo 2',cursive;font-size:3rem;color:var(--gold);line-height:1;}
+.points-lbl{color:var(--muted);font-size:.85rem;}
+
+.favorites-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;
+}
+.fav-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:14px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .2s;
+}
+.fav-card:hover{border-color:var(--purple);transform:scale(1.02);}
+.fav-emoji{font-size:1.8rem;}
+.fav-name{font-weight:600;font-size:.9rem;}
+.fav-visits{color:var(--muted);font-size:.75rem;}
+
+/* ============ PROGRESS BAR ============ */
+.progress-wrap{background:var(--surface);border-radius:20px;padding:24px;margin-bottom:20px;}
+.progress-title{font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;}
+.progress-bar{height:10px;background:rgba(255,255,255,.1);border-radius:5px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:5px;transition:width 1s ease-out;}
+.level-badges{
+  display:flex;gap:10px;margin-top:16px;justify-content:space-between;
+}
+.lvl{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  font-size:.7rem;color:var(--muted);
+}
+.lvl-icon{font-size:1.4rem;filter:grayscale(1);transition:filter .3s;}
+.lvl.unlocked .lvl-icon{filter:none;}
+.lvl.unlocked{color:var(--gold);}
+
+/* ============ FIREWORKS ============ */
+.fw-particle{
+  position:fixed;pointer-events:none;z-index:9000;
+  border-radius:50%;animation:fwAnim 1.2s ease-out forwards;
+}
+@keyframes fwAnim{
+  0%{transform:translate(0,0) scale(1);opacity:1;}
+  100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}
+}
+
+/* ============ TOAST ============ */
+.toast-stack{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  z-index:6000;display:flex;flex-direction:column;gap:8px;align-items:center;
+  pointer-events:none;
+}
+.toast{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:12px 24px;border-radius:40px;
+  font-weight:600;font-size:.9rem;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+  animation:toastIn .4s cubic-bezier(.17,.67,.56,1.3), toastOut .4s .6s ease-out forwards;
+  display:flex;align-items:center;gap:8px;pointer-events:none;
+  white-space:nowrap;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(10px)}}
+
+/* ============ REGISTER STAND FORM ============ */
+.rstand-steps{
+  display:flex;gap:0;margin-bottom:28px;
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.rstand-step{
+  flex:1;padding:12px;text-align:center;
+  font-size:.85rem;font-weight:600;color:var(--muted);
+  border-right:1px solid var(--border);
+  transition:all .3s;
+}
+.rstand-step:last-child{border-right:none;}
+.rstand-step.active{background:rgba(168,85,247,.2);color:var(--text);}
+.rstand-step.done{background:rgba(6,214,160,.1);color:var(--teal);}
+
+.step-content{display:none;}
+.step-content.active{display:block;animation:fadeIn .3s;}
+
+.color-picker-row{display:flex;gap:8px;flex-wrap:wrap;}
+.color-opt{
+  width:32px;height:32px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;transition:transform .2s,border-color .2s;
+}
+.color-opt:hover,.color-opt.selected{transform:scale(1.2);border-color:white;}
+
+.emoji-picker-row{display:flex;gap:8px;flex-wrap:wrap;}
+.emoji-opt{
+  width:42px;height:42px;border-radius:10px;
+  background:var(--surface2);border:2px solid var(--border);
+  font-size:1.4rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.emoji-opt:hover,.emoji-opt.selected{border-color:var(--purple);background:rgba(168,85,247,.15);}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:600px){
+  .auth-box{padding:24px;}
+  .form-row{grid-template-columns:1fr;}
+  .modal-products{grid-template-columns:1fr;}
+  .profile-hero{flex-direction:column;align-items:flex-start;}
+  .points-card{margin-left:0;width:100%;}
+  .dash-grid{grid-template-columns:1fr;}
+}
+
+/* ============ ANIMATIONS FOR STANDS ============ */
+.shimmer{
+  position:relative;overflow:hidden;
+}
+.shimmer::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);
+  animation:shimmer 2s infinite;
+}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+.floating{animation:float 3s ease-in-out infinite alternate;}
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+
+/* ============ EMPTY STATES ============ */
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--muted);
+}
+.empty-state .empty-icon{font-size:4rem;margin-bottom:16px;opacity:.5;}
+.empty-state p{font-size:1rem;}
+
+/* ============ GALLERY ============ */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+.gallery-slot{
+  aspect-ratio:1;
+  border-radius:10px;
+  border:2px dashed var(--border);
+  background:var(--surface2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;overflow:hidden;position:relative;
+  transition:border-color .2s,background .2s;
+}
+.gallery-slot:hover{border-color:var(--purple);background:rgba(168,85,247,.1);}
+.gallery-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:8px;}
+.gallery-slot .gs-icon{font-size:1.6rem;opacity:.4;}
+.gallery-slot .gs-label{font-size:.65rem;color:var(--muted);margin-top:4px;opacity:.7;}
+.gallery-slot .gs-remove{
+  position:absolute;top:4px;right:4px;
+  background:rgba(239,71,111,.85);color:#fff;
+  width:20px;height:20px;border-radius:50%;border:none;
+  font-size:.7rem;cursor:pointer;display:none;
+  align-items:center;justify-content:center;z-index:2;
+}
+.gallery-slot:hover .gs-remove{display:flex;}
+/* Modal gallery */
+.modal-gallery{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  margin-bottom:18px;
+}
+.modal-gallery-img{
+  aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:pointer;
+  background:var(--surface2);
+  transition:transform .2s;
+}
+.modal-gallery-img:hover{transform:scale(1.04);}
+.modal-gallery-img img{width:100%;height:100%;object-fit:cover;}
+.modal-gallery-img.empty{display:flex;align-items:center;justify-content:center;font-size:1.4rem;opacity:.25;}
+/* Lightbox */
+.lightbox{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.95);z-index:8000;
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+}
+.lightbox.open{display:flex;animation:fadeIn .25s;}
+.lightbox img{max-width:90vw;max-height:80vh;border-radius:12px;object-fit:contain;box-shadow:0 0 60px rgba(0,0,0,.8);}
+.lightbox-close{
+  position:absolute;top:16px;right:20px;
+  background:rgba(255,255,255,.1);border:none;color:#fff;
+  font-size:1.8rem;width:44px;height:44px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.lightbox-close:hover{background:rgba(239,71,111,.6);}
+.lightbox-nav{
+  display:flex;gap:16px;
+}
+.lightbox-dot{
+  width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);
+  cursor:pointer;transition:background .2s;
+}
+.lightbox-dot.active{background:#fff;}
+/* WhatsApp consult button */
+.wa-consult-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:14px 20px;
+  background:linear-gradient(135deg,#25D366,#128C7E);
+  color:#fff;border:none;border-radius:14px;
+  font-family:'Quicksand',sans-serif;font-size:1rem;font-weight:700;
+  cursor:pointer;margin-top:14px;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(37,211,102,.25);
+  text-decoration:none;
+}
+.wa-consult-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,211,102,.4);}
+.wa-consult-btn:active{transform:scale(.97);}
+.wa-consult-btn .wa-icon{font-size:1.4rem;}
+.wa-no-number{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:12px;
+  color:var(--muted);font-size:.85rem;margin-top:14px;
+}
+
+/* My Stand Preview */
+.my-stand-preview{
+  background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(247,37,133,.1));
+  border:1px solid rgba(168,85,247,.3);
+  border-radius:16px;padding:20px;
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:20px;
+  cursor:pointer;transition:all .3s;
+}
+.my-stand-preview:hover{border-color:var(--purple);transform:translateY(-3px);}
+.msp-emoji{font-size:3rem;}
+.msp-info h3{font-size:1.1rem;}
+.msp-info p{color:var(--muted);font-size:.85rem;margin-top:2px;}
+.msp-arrow{margin-left:auto;font-size:1.5rem;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<!-- Stars background -->
+<div id="starsBg"></div>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+
+<!-- Toast stack -->
+<div class="toast-stack" id="toastStack"></div>
+
+<!-- ========== APP ========== -->
+<div id="app">
+
+  <!-- ===== LANDING ===== -->
+  <div id="landing" class="screen active">
+    <div class="landing-glow"></div>
+    <div class="floating" style="margin-bottom:8px;font-size:4rem;">🎡</div>
+    <div class="big-logo">FeriaVirtual</div>
+    <div class="big-logo" style="font-size:clamp(2rem,6vw,4rem);color:var(--pink);">Pro 2026</div>
+    <div class="big-sub">La feria que nunca cierra</div>
+
+    <div class="landing-cards">
+      <div class="role-card" style="--accent:var(--teal);--gradient:linear-gradient(135deg,#06D6A0,#118AB2);" onclick="gotoScreen('visitorAuth')">
+        <span class="icon">🛍️</span>
+        <h3>Soy Visitante</h3>
+        <p>Explora stands, gana puntos, descubre productos únicos y acumula beneficios con cada visita.</p>
+        <div class="role-badge" style="background:var(--teal)">Registro gratis →</div>
+      </div>
+      <div class="role-card" style="--accent:var(--orange);--gradient:linear-gradient(135deg,#FF6B35,#FFD166);" onclick="gotoScreen('entrepreneurAuth')">
+        <span class="icon">🚀</span>
+        <h3>Soy Emprendedor</h3>
+        <p>Crea tu stand virtual, muestra tus productos y conecta con miles de visitantes.</p>
+        <div class="role-badge" style="background:var(--orange)">Crear stand →</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;color:var(--muted);font-size:.85rem;">
+      ¿Ya tienes cuenta? <span style="color:var(--gold);cursor:pointer;font-weight:600;" onclick="gotoScreen('loginSelect')">Inicia sesión</span>
+    </div>
+  </div>
+
+  <!-- ===== LOGIN SELECT ===== -->
+  <div id="loginSelect" class="screen">
+    <div class="auth-wrap">
+      <div class="auth-box">
+        <button class="auth-back" onclick="gotoScreen('landing')">← Volver</button>
+        <div class="auth-title">¡Bienvenido de vuelta! 👋</div>
+        <div class="auth-sub">¿Con qué rol quieres ingresar?</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <button class="btn btn-teal btn-full" onclick="gotoScreen('visitorLogin')">🛍️ Ingresar como Visitante</button>
+          <button class="btn btn-full" style="background:var(--orange);color:#000;" onclick="gotoScreen('entrepreneurLogin')">🚀 Ingresar como Emprendedor</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VISITOR AUTH ===== -->
+  <div id="visitorAuth" class="screen">
+    <div class="auth-wrap">
+      <div class="auth-box">
+        <button class="auth-back" onclick="gotoScreen('landing')">← Volver</button>
+        <div class="auth-title">Registro de Visitante 🛍️</div>
+        <div class="auth-sub">Crea tu cuenta y empieza a ganar puntos</div>
+        <div class="error-msg" id="vaError"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input class="form-input" id="vaName" placeholder="Tu nombre" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Apellido</label>
+            <input class="form-input" id="vaLastName" placeholder="Tu apellido" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="vaEmail" placeholder="tu@email.com" type="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input class="form-input" id="vaPass" placeholder="Mínimo 6 caracteres" type="password">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ciudad</label>
+          <input class="form-input" id="vaCity" placeholder="¿Desde dónde nos visitas?" type="text">
+        </div>
+        <button class="btn btn-teal btn-full" onclick="registerVisitor()">🎉 Crear mi cuenta y recibir 50 pts</button>
+        <div class="form-divider">o</div>
+        <div style="text-align:center;font-size:.85rem;color:var(--muted);">
+          ¿Ya tienes cuenta? <span style="color:var(--teal);cursor:pointer;font-weight:600;" onclick="gotoScreen('visitorLogin')">Iniciar sesión</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VISITOR LOGIN ===== -->
+  <div id="visitorLogin" class="screen">
+    <div class="auth-wrap">
+      <div class="auth-box">
+        <button class="auth-back" onclick="gotoScreen('loginSelect')">← Volver</button>
+        <div class="auth-title">Iniciar Sesión 🛍️</div>
+        <div class="auth-sub">Bienvenido de vuelta, ¡te esperaba!</div>
+        <div class="error-msg" id="vlError"></div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="vlEmail" placeholder="tu@email.com" type="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input class="form-input" id="vlPass" placeholder="Tu contraseña" type="password">
+        </div>
+        <button class="btn btn-teal btn-full" onclick="loginVisitor()">Ingresar →</button>
+        <div class="form-divider">o</div>
+        <div style="text-align:center;font-size:.85rem;color:var(--muted);">
+          ¿No tienes cuenta? <span style="color:var(--teal);cursor:pointer;font-weight:600;" onclick="gotoScreen('visitorAuth')">Registrarse gratis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ENTREPRENEUR AUTH ===== -->
+  <div id="entrepreneurAuth" class="screen">
+    <div class="auth-wrap">
+      <div class="auth-box" style="max-width:560px;">
+        <button class="auth-back" onclick="gotoScreen('landing')">← Volver</button>
+        <div class="auth-title">Registro de Emprendedor 🚀</div>
+        <div class="auth-sub">Crea tu cuenta y configura tu stand virtual</div>
+        <div class="error-msg" id="eaError"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input class="form-input" id="eaName" placeholder="Tu nombre" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Apellido</label>
+            <input class="form-input" id="eaLastName" placeholder="Tu apellido" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="eaEmail" placeholder="tu@negocio.com" type="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input class="form-input" id="eaPass" placeholder="Mínimo 6 caracteres" type="password">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nombre del Emprendimiento</label>
+          <input class="form-input" id="eaBizName" placeholder="Ej: Artesanías Luna" type="text">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-select" id="eaCategory">
+              <option value="">Seleccionar...</option>
+              <option value="Gastronomía">🍕 Gastronomía</option>
+              <option value="Moda">👗 Moda y Textil</option>
+              <option value="Artesanías">🎨 Artesanías</option>
+              <option value="Tecnología">💻 Tecnología</option>
+              <option value="Salud">💚 Salud y Bienestar</option>
+              <option value="Hogar">🏠 Hogar y Deco</option>
+              <option value="Arte">🖼️ Arte y Cultura</option>
+              <option value="Servicios">⚡ Servicios</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ciudad</label>
+            <input class="form-input" id="eaCity" placeholder="Tu ciudad" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descripción del emprendimiento</label>
+          <textarea class="form-textarea" id="eaDesc" placeholder="Cuéntanos qué ofreces..."></textarea>
+        </div>
+        <button class="btn btn-full" style="background:var(--orange);color:#000;" onclick="registerEntrepreneur()">🚀 Crear mi stand gratis</button>
+        <div class="form-divider">o</div>
+        <div style="text-align:center;font-size:.85rem;color:var(--muted);">
+          ¿Ya tienes cuenta? <span style="color:var(--orange);cursor:pointer;font-weight:600;" onclick="gotoScreen('entrepreneurLogin')">Iniciar sesión</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ENTREPRENEUR LOGIN ===== -->
+  <div id="entrepreneurLogin" class="screen">
+    <div class="auth-wrap">
+      <div class="auth-box">
+        <button class="auth-back" onclick="gotoScreen('loginSelect')">← Volver</button>
+        <div class="auth-title">Panel del Emprendedor 🚀</div>
+        <div class="auth-sub">Accede a tu stand y gestiona tus ventas</div>
+        <div class="error-msg" id="elError"></div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="elEmail" placeholder="tu@negocio.com" type="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input class="form-input" id="elPass" placeholder="Tu contraseña" type="password">
+        </div>
+        <button class="btn btn-full" style="background:var(--orange);color:#000;" onclick="loginEntrepreneur()">Ingresar →</button>
+        <div class="form-divider">o</div>
+        <div style="text-align:center;font-size:.85rem;color:var(--muted);">
+          ¿No tienes cuenta? <span style="color:var(--orange);cursor:pointer;font-weight:600;" onclick="gotoScreen('entrepreneurAuth')">Registrarse</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FAIR MAIN (VISITOR) ===== -->
+  <div id="fairMain" class="screen">
+    <!-- Navbar -->
+    <nav class="navbar" id="visitorNav">
+      <div class="nav-brand">🎡 FeriaVirtual</div>
+      <button class="nav-tab active" id="tabFeria" onclick="switchTab('feria')">🏪 Feria</button>
+      <button class="nav-tab" id="tabProfile" onclick="switchTab('profile')">👤 Mi Perfil</button>
+      <div class="nav-spacer"></div>
+      <div class="nav-user" onclick="switchTab('profile')">
+        <div class="nav-avatar" id="navAvatar">👤</div>
+        <span class="nav-name" id="navName">Visitante</span>
+        <span class="nav-points" id="navPoints">0 pts</span>
+      </div>
+      <button class="btn btn-sm btn-outline" onclick="logout()">Salir</button>
+    </nav>
+
+    <!-- TAB: FERIA -->
+    <div id="tab-feria">
+      <!-- Welcome banner (return visit) -->
+      <div id="welcomeBanner" style="display:none;padding:0 24px;">
+        <div class="welcome-banner">
+          <div class="wb-icon">🎉</div>
+          <div class="wb-text">
+            <div class="wb-title" id="wbTitle">¡Bienvenido de vuelta!</div>
+            <div class="wb-sub" id="wbSub">Tienes un bono especial por volver hoy</div>
+          </div>
+          <div class="wb-reward" id="wbReward" onclick="claimReturnBonus()">+25 pts · Reclamar</div>
+        </div>
+      </div>
+
+      <!-- Daily streak -->
+      <div style="max-width:900px;margin:16px auto;padding:0 24px;">
+        <div class="dash-panel">
+          <h3>🔥 Racha de visitas</h3>
+          <div class="streak-bar" id="streakBar"></div>
+        </div>
+      </div>
+
+      <!-- Search + Filters -->
+      <div class="section-wrap" style="padding-bottom:0;">
+        <div class="search-bar">
+          <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar stands, productos, emprendedores..." oninput="filterStands()">
+        </div>
+        <div class="filter-chips" id="filterChips">
+          <div class="chip active" onclick="filterByCategory('Todos',this)">✨ Todos</div>
+          <div class="chip" onclick="filterByCategory('Gastronomía',this)">🍕 Gastronomía</div>
+          <div class="chip" onclick="filterByCategory('Moda',this)">👗 Moda</div>
+          <div class="chip" onclick="filterByCategory('Artesanías',this)">🎨 Artesanías</div>
+          <div class="chip" onclick="filterByCategory('Tecnología',this)">💻 Tecnología</div>
+          <div class="chip" onclick="filterByCategory('Salud',this)">💚 Salud</div>
+          <div class="chip" onclick="filterByCategory('Hogar',this)">🏠 Hogar</div>
+          <div class="chip" onclick="filterByCategory('Arte',this)">🖼️ Arte</div>
+          <div class="chip" onclick="filterByCategory('Servicios',this)">⚡ Servicios</div>
+        </div>
+      </div>
+
+      <!-- Stands grid -->
+      <div class="section-wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-title">🏪 Stands de emprendedores</div>
+            <div class="section-sub" id="standsCount">Cargando...</div>
+          </div>
+        </div>
+        <div class="stands-grid" id="standsGrid"></div>
+        <div class="empty-state" id="standsEmpty" style="display:none;">
+          <div class="empty-icon">🔍</div>
+          <p>No se encontraron stands con ese criterio</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PROFILE (VISITOR) -->
+    <div id="tab-profile" style="display:none;">
+      <div class="profile-wrap">
+        <div class="profile-hero">
+          <div class="profile-avatar" id="profileAvatar">👤</div>
+          <div class="profile-info">
+            <h2 id="profileName">Mi Nombre</h2>
+            <p id="profileEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="31545c50585d715449505c415d541f525e5c">[email&#160;protected]</a></p>
+            <p id="profileCity" style="margin-top:2px;"></p>
+            <div class="profile-badges" id="profileBadges"></div>
+          </div>
+          <div class="points-card">
+            <div class="points-num" id="profilePoints">0</div>
+            <div class="points-lbl">puntos acumulados</div>
+            <div style="margin-top:10px;font-size:.75rem;color:var(--muted);">
+              Miembro desde <span id="memberSince">hoy</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Level progress -->
+        <div class="progress-wrap">
+          <div class="progress-title">
+            <span>Nivel: <span id="levelName" style="color:var(--gold);">Explorador</span></span>
+            <span style="font-size:.85rem;color:var(--muted);" id="levelProgress">0/100 pts</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="levelFill" style="width:0%;background:linear-gradient(90deg,var(--purple),var(--pink));"></div>
+          </div>
+          <div class="level-badges">
+            <div class="lvl" id="lvl1"><div class="lvl-icon">🌱</div><div>Explorador</div></div>
+            <div class="lvl" id="lvl2"><div class="lvl-icon">⭐</div><div>Regular</div></div>
+            <div class="lvl" id="lvl3"><div class="lvl-icon">🔥</div><div>Feriante</div></div>
+            <div class="lvl" id="lvl4"><div class="lvl-icon">💎</div><div>VIP</div></div>
+            <div class="lvl" id="lvl5"><div class="lvl-icon">👑</div><div>Leyenda</div></div>
+          </div>
+        </div>
+
+        <!-- Incentives / rewards -->
+        <div class="dash-panel" style="margin-bottom:20px;">
+          <h3>🎁 Mis recompensas e incentivos</h3>
+          <div id="rewardsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:4px;"></div>
+        </div>
+
+        <!-- Favorites -->
+        <div class="dash-panel" style="margin-bottom:20px;">
+          <h3>❤️ Stands favoritos</h3>
+          <div class="favorites-grid" id="favoritesGrid"></div>
+          <div class="empty-state" id="favEmpty" style="display:none;padding:30px 0;">
+            <div class="empty-icon" style="font-size:2rem;">💔</div>
+            <p style="font-size:.85rem;">Aún no tienes favoritos. Visita un stand y dale ❤️</p>
+          </div>
+        </div>
+
+        <!-- Visit history -->
+        <div class="dash-panel">
+          <h3>📋 Historial de visitas</h3>
+          <div class="visit-log" id="visitHistory"></div>
+          <div class="empty-state" id="histEmpty" style="display:none;padding:20px 0;">
+            <p style="font-size:.85rem;">Aún no has visitado ningún stand</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ENTREPRENEUR DASHBOARD ===== -->
+  <div id="entrepreneurDash" class="screen">
+    <!-- Navbar -->
+    <nav class="navbar" id="entrepreneurNav">
+      <div class="nav-brand">🎡 FeriaVirtual</div>
+      <button class="nav-tab active" id="etabDash" onclick="switchEntrepTab('eDash')">📊 Dashboard</button>
+      <button class="nav-tab" id="etabStand" onclick="switchEntrepTab('eStand')">🏪 Mi Stand</button>
+      <button class="nav-tab" id="etabFeria" onclick="switchEntrepTab('eFeria')">🗺️ Ver Feria</button>
+      <div class="nav-spacer"></div>
+      <div class="nav-user">
+        <div class="nav-avatar" style="background:var(--orange);">🚀</div>
+        <span class="nav-name" id="entNavName">Emprendedor</span>
+      </div>
+      <button class="btn btn-sm btn-outline" onclick="logout()">Salir</button>
+    </nav>
+
+    <!-- TAB: DASHBOARD -->
+    <div id="tab-eDash">
+      <div class="dash-wrap">
+        <div style="margin-bottom:20px;">
+          <h2 style="font-size:1.6rem;">¡Hola, <span id="entHelloName">Emprendedor</span>! 👋</h2>
+          <p style="color:var(--muted);font-size:.9rem;">Aquí está el resumen de tu actividad</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="dash-stats" id="entStats">
+          <div class="stat-card"><div class="stat-icon">👁️</div><div><div class="stat-val" id="statVisits">0</div><div class="stat-lbl">Visitas totales</div></div></div>
+          <div class="stat-card"><div class="stat-icon">❤️</div><div><div class="stat-val" id="statFavs">0</div><div class="stat-lbl">Favoritos</div></div></div>
+          <div class="stat-card"><div class="stat-icon">📦</div><div><div class="stat-val" id="statProds">0</div><div class="stat-lbl">Productos</div></div></div>
+          <div class="stat-card"><div class="stat-icon">⭐</div><div><div class="stat-val" id="statRating">-</div><div class="stat-lbl">Calificación</div></div></div>
+        </div>
+
+        <div class="dash-grid">
+          <!-- Visits chart -->
+          <div class="dash-panel">
+            <h3>📈 Visitas (últimos 7 días)</h3>
+            <div class="chart-bars" id="visitsChart"></div>
+            <div class="chart-labels" id="chartLabels"></div>
+          </div>
+          <!-- Visit log -->
+          <div class="dash-panel">
+            <h3>🕐 Visitantes recientes</h3>
+            <div class="visit-log" id="entVisitLog"></div>
+            <div class="empty-state" id="entLogEmpty" style="display:none;padding:20px 0;">
+              <p style="font-size:.85rem;">Aún no tienes visitas registradas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: MY STAND -->
+    <div id="tab-eStand" style="display:none;">
+      <div class="dash-wrap">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h2 style="font-size:1.6rem;">🏪 Mi Stand</h2>
+            <p style="color:var(--muted);font-size:.9rem;">Personaliza y gestiona tu espacio</p>
+          </div>
+          <button class="btn btn-gold" onclick="openAddProduct()">+ Agregar producto</button>
+        </div>
+
+        <!-- Stand customization -->
+        <div class="dash-panel" style="margin-bottom:20px;">
+          <h3>🎨 Personalización del stand</h3>
+          <div class="form-row" style="margin-top:12px;">
+            <div class="form-group">
+              <label class="form-label">Nombre del stand</label>
+              <input class="form-input" id="standNameInput" placeholder="Nombre de tu stand">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Eslogan</label>
+              <input class="form-input" id="standSloganInput" placeholder="Tu eslogan...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-textarea" id="standDescInput" placeholder="Describe tu emprendimiento..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Emoji / Logo del stand</label>
+            <div class="emoji-picker-row" id="standEmojiPicker"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color del stand</label>
+            <div class="color-picker-row" id="standColorPicker"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Redes sociales (opcional)</label>
+            <div class="form-row">
+              <input class="form-input" id="standInstagram" placeholder="@instagram">
+              <input class="form-input" id="standWhatsapp" placeholder="WhatsApp (ej: 3001234567)">
+            </div>
+            <div class="form-hint">💬 El número de WhatsApp permite que los visitantes te consulten directamente desde tu stand</div>
+          </div>
+          <!-- GALLERY -->
+          <div class="form-group">
+            <label class="form-label">📸 Galería del stand (hasta 4 fotos)</label>
+            <div class="form-hint" style="margin-bottom:8px;">Haz clic en cada casilla para subir una imagen desde tu dispositivo</div>
+            <div class="gallery-grid" id="galleryEditor">
+              <div class="gallery-slot" onclick="triggerPhotoUpload(0)">
+                <input type="file" accept="image/*" style="display:none" id="photoInput0" onchange="handlePhotoUpload(0,this)">
+                <span class="gs-icon">📷</span><span class="gs-label">Foto 1</span>
+                <button class="gs-remove" onclick="removePhoto(event,0)">×</button>
+              </div>
+              <div class="gallery-slot" onclick="triggerPhotoUpload(1)">
+                <input type="file" accept="image/*" style="display:none" id="photoInput1" onchange="handlePhotoUpload(1,this)">
+                <span class="gs-icon">📷</span><span class="gs-label">Foto 2</span>
+                <button class="gs-remove" onclick="removePhoto(event,1)">×</button>
+              </div>
+              <div class="gallery-slot" onclick="triggerPhotoUpload(2)">
+                <input type="file" accept="image/*" style="display:none" id="photoInput2" onchange="handlePhotoUpload(2,this)">
+                <span class="gs-icon">📷</span><span class="gs-label">Foto 3</span>
+                <button class="gs-remove" onclick="removePhoto(event,2)">×</button>
+              </div>
+              <div class="gallery-slot" onclick="triggerPhotoUpload(3)">
+                <input type="file" accept="image/*" style="display:none" id="photoInput3" onchange="handlePhotoUpload(3,this)">
+                <span class="gs-icon">📷</span><span class="gs-label">Foto 4</span>
+                <button class="gs-remove" onclick="removePhoto(event,3)">×</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-purple" style="background:var(--purple);color:#fff;margin-top:8px;" onclick="saveStandConfig()">💾 Guardar cambios</button>
+        </div>
+
+        <!-- Products -->
+        <div class="dash-panel">
+          <h3>📦 Mis productos</h3>
+          <div id="myProductsList"></div>
+          <div class="empty-state" id="prodsEmpty" style="display:none;">
+            <div class="empty-icon">📦</div>
+            <p>Agrega tu primer producto</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: VER FERIA (desde emprendedor) -->
+    <div id="tab-eFeria" style="display:none;">
+      <div style="max-width:900px;margin:24px auto;padding:0 24px;">
+        <div class="my-stand-preview" id="myStandPreview" onclick="switchEntrepTab('eStand')">
+          <div class="msp-emoji" id="mspEmoji">🚀</div>
+          <div class="msp-info">
+            <h3 id="mspName">Mi Stand</h3>
+            <p>Haz clic para editar tu stand</p>
+          </div>
+          <div class="msp-arrow">→</div>
+        </div>
+      </div>
+      <!-- Same stands grid for entrepreneur -->
+      <div class="section-wrap" style="padding-top:0;">
+        <div class="search-bar">
+          <input type="text" class="search-input" id="searchInputEnt" placeholder="🔍 Buscar en la feria..." oninput="filterStandsEnt()">
+        </div>
+        <div class="stands-grid" id="standsGridEnt"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== STAND DETAIL MODAL ===== -->
+<div class="modal-overlay" id="standModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('standModal')">×</button>
+    <div class="modal-banner" id="modalBanner">
+      <span id="modalEmoji" style="font-size:5rem;"></span>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div class="modal-name" id="modalName"></div>
+          <div class="modal-meta" id="modalMeta"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-sm btn-outline" id="favBtn" onclick="toggleFavorite()">❤️ Favorito</button>
+          <span id="modalRatingDisplay" style="color:var(--gold);font-size:.9rem;"></span>
+        </div>
+      </div>
+      <div class="modal-desc" id="modalDesc"></div>
+
+      <!-- GALLERY -->
+      <div id="modalGalleryWrap" style="display:none;margin-bottom:18px;">
+        <h4 style="margin-bottom:10px;font-size:.9rem;color:var(--muted);">📸 Galería</h4>
+        <div class="modal-gallery" id="modalGallery"></div>
+      </div>
+
+      <!-- INSTAGRAM -->
+      <div id="modalSocial" style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;"></div>
+
+      <!-- PRODUCTS -->
+      <h4 style="margin-bottom:12px;font-size:.95rem;color:var(--muted);">Productos disponibles</h4>
+      <div class="modal-products" id="modalProducts"></div>
+
+      <!-- WHATSAPP CONSULT BUTTON -->
+      <div id="modalWaSection"></div>
+
+      <!-- RATING -->
+      <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
+        <h4 style="margin-bottom:10px;font-size:.95rem;color:var(--muted);">Tu calificación</h4>
+        <div class="rating-stars" id="ratingStars">
+          <span class="rating-star" onclick="rateStand(1)">⭐</span>
+          <span class="rating-star" onclick="rateStand(2)">⭐</span>
+          <span class="rating-star" onclick="rateStand(3)">⭐</span>
+          <span class="rating-star" onclick="rateStand(4)">⭐</span>
+          <span class="rating-star" onclick="rateStand(5)">⭐</span>
+        </div>
+        <div id="ratingMsg" style="font-size:.8rem;color:var(--muted);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD PRODUCT MODAL ===== -->
+<div class="modal-overlay" id="addProductModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('addProductModal')">×</button>
+    <div class="modal-body" style="padding-top:30px;">
+      <div class="auth-title" style="margin-bottom:6px;" id="addProdTitle">Agregar producto</div>
+      <div class="auth-sub">Este producto aparecerá en tu stand virtual</div>
+      <div class="form-group">
+        <label class="form-label">Nombre del producto</label>
+        <input class="form-input" id="prodName" placeholder="Ej: Torta casera de chocolate">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Precio (ARS)</label>
+          <input class="form-input" id="prodPrice" placeholder="1500" type="number">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Emoji del producto</label>
+          <input class="form-input" id="prodEmoji" placeholder="🎂" maxlength="2">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-textarea" id="prodDesc" placeholder="Describe el producto..." style="min-height:70px;"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-gold" style="flex:1;" onclick="saveProduct()">💾 Guardar producto</button>
+        <button class="btn btn-outline" onclick="closeModal('addProductModal')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightboxImg" src="" alt="Foto del stand">
+  <div class="lightbox-nav" id="lightboxNav"></div>
+</div>
+
+<script>
+// ==================== DATA LAYER (localStorage) ====================
+const DB = {
+  get: (k, def=null) => { try { const v = localStorage.getItem('fv_'+k); return v ? JSON.parse(v) : def; } catch(e){ return def; }},
+  set: (k, v) => { try { localStorage.setItem('fv_'+k, JSON.stringify(v)); } catch(e){} },
+  del: (k) => localStorage.removeItem('fv_'+k)
+};
+
+// ==================== INIT STARS ====================
+const starsBg = document.getElementById('starsBg');
+for(let i=0;i<150;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random()*3+0.5;
+  s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${1.5+Math.random()*2.5}s;animation-delay:${Math.random()*3}s;`;
+  starsBg.appendChild(s);
+}
+
+// ==================== CURSOR ====================
+const cursorEl = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursorEl.style.left = e.clientX+'px';
+  cursorEl.style.top  = e.clientY+'px';
+});
+
+// ==================== SCREEN ROUTING ====================
+let currentScreen = 'landing';
+function gotoScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='';});
+  const el = document.getElementById(id);
+  if(el){ el.classList.add('active'); }
+  currentScreen = id;
+}
+
+// ==================== TOAST ====================
+function toast(msg, color='var(--teal)') {
+  const stack = document.getElementById('toastStack');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.style.borderColor = color;
+  t.innerHTML = msg;
+  stack.appendChild(t);
+  setTimeout(()=>t.remove(), 1100);
+}
+
+// ==================== FIREWORKS ====================
+function fireworks(x, y) {
+  const colors = ['#FFD166','#EF476F','#06D6A0','#118AB2','#FF6B35','#A855F7'];
+  for(let i=0;i<24;i++){
+    const p = document.createElement('div');
+    p.className = 'fw-particle';
+    const ang = (i/24)*360;
+    const dist = 50+Math.random()*80;
+    p.style.cssText = `
+      left:${x}px;top:${y}px;
+      width:${4+Math.random()*4}px;height:${4+Math.random()*4}px;
+      background:${colors[i%colors.length]};
+      --tx:${Math.cos(ang*Math.PI/180)*dist}px;
+      --ty:${Math.sin(ang*Math.PI/180)*dist}px;
+      animation-duration:${0.8+Math.random()*0.6}s;
+    `;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 1500);
+  }
+}
+
+// ==================== CURRENT USER ====================
+let currentUser = null;
+let currentRole = null; // 'visitor' | 'entrepreneur'
+let currentViewStandId = null;
+let currentCategory = 'Todos';
+let editProductId = null;
+
+// ==================== DEMO STANDS (seeded data) ====================
+function seedDemoStands() {
+  const stands = DB.get('stands', []);
+  // Re-seed if no stands OR if demo stands don't have gallery yet
+  if(stands.length > 0 && stands.find(s=>s.id==='demo1' && s.gallery)) return;
+  const demo = [
+    { id: 'demo1', ownerId: 'demo', ownerName: 'María García', bizName: 'Dulces de la Abuela', category: 'Gastronomía', city: 'Buenos Aires',
+      desc: 'Postres artesanales preparados con recetas de familia. Tortas, alfajores y dulces de membrillo.',
+      emoji: '🍰', color: '#FF6B35', slogan: '¡El sabor de siempre!', instagram: '@dulces_abuela', whatsapp: '1145678901',
+      products: [{id:'p1',name:'Torta de chocolate',price:2500,emoji:'🎂',desc:'Húmeda y esponjosa'},{id:'p2',name:'Alfajores x6',price:900,emoji:'🍪',desc:'Rellenos de dulce de leche'},{id:'p3',name:'Dulce de membrillo',price:600,emoji:'🍯',desc:'500g artesanal'}],
+      gallery: [
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23FF6B3522"/><text x="100" y="110" font-size="70" text-anchor="middle">🍰</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23FF6B3533"/><text x="100" y="110" font-size="70" text-anchor="middle">🎂</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23FF6B3511"/><text x="100" y="110" font-size="70" text-anchor="middle">🍪</text></svg>',
+        null
+      ],
+      visits: 47, favs: 12, rating: 4.8, ratingCount: 15, visitLog: [{visitor:'Ana M.',time:'Hace 2h'},{visitor:'Carlos R.',time:'Hace 5h'}]
+    },
+    { id: 'demo2', ownerId: 'demo', ownerName: 'Carlos Rodríguez', bizName: 'TechRepara', category: 'Tecnología', city: 'Córdoba',
+      desc: 'Reparación y venta de dispositivos electrónicos. Celulares, tablets y accesorios a precios accesibles.',
+      emoji: '📱', color: '#118AB2', slogan: 'Tu tecnología en buenas manos', instagram: '@techrepara', whatsapp: '3515551234',
+      products: [{id:'p4',name:'Reparación pantalla',price:8000,emoji:'🔧',desc:'iPhone / Android'},{id:'p5',name:'Funda personalizada',price:1200,emoji:'📱',desc:'Diseño a elección'},{id:'p6',name:'Cargador original',price:2200,emoji:'⚡',desc:'Todas las marcas'}],
+      gallery: [
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23118AB222"/><text x="100" y="110" font-size="70" text-anchor="middle">📱</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23118AB233"/><text x="100" y="110" font-size="70" text-anchor="middle">💻</text></svg>',
+        null, null
+      ],
+      visits: 31, favs: 8, rating: 4.5, ratingCount: 9, visitLog: [{visitor:'Pablo S.',time:'Hace 1h'},{visitor:'Laura P.',time:'Hace 3h'}]
+    },
+    { id: 'demo3', ownerId: 'demo', ownerName: 'Laura Pérez', bizName: 'Arte & Moda Lú', category: 'Moda', city: 'San Juan',
+      desc: 'Indumentaria femenina única con estampados artísticos originales. Cada prenda es una obra de arte.',
+      emoji: '👗', color: '#F72585', slogan: 'Viste tu personalidad', instagram: '@arte_moda_lu', whatsapp: '',
+      products: [{id:'p7',name:'Remera estampada',price:3500,emoji:'👕',desc:'Diseños exclusivos'},{id:'p8',name:'Bolso artesanal',price:5200,emoji:'👜',desc:'Cuero sintético'},{id:'p9',name:'Accesorio set',price:1800,emoji:'💍',desc:'Collar + aros'}],
+      gallery: [
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23F7258522"/><text x="100" y="110" font-size="70" text-anchor="middle">👗</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23F7258533"/><text x="100" y="110" font-size="70" text-anchor="middle">👜</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23F7258511"/><text x="100" y="110" font-size="70" text-anchor="middle">💍</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23F7258544"/><text x="100" y="110" font-size="70" text-anchor="middle">👠</text></svg>'
+      ],
+      visits: 62, favs: 19, rating: 4.9, ratingCount: 22, visitLog: [{visitor:'Sofía M.',time:'Hace 30min'},{visitor:'Valentina R.',time:'Hace 1h'}]
+    },
+    { id: 'demo4', ownerId: 'demo', ownerName: 'Diego Torres', bizName: 'Artesanos del Norte', category: 'Artesanías', city: 'Salta',
+      desc: 'Artesanías regionales del noroeste argentino. Textiles, cerámica y objetos decorativos con identidad cultural.',
+      emoji: '🎨', color: '#A855F7', slogan: 'Cultura y tradición en tus manos', instagram: '', whatsapp: '3871234567',
+      products: [{id:'p10',name:'Tapiz andino',price:4500,emoji:'🖼️',desc:'Tejido a mano'},{id:'p11',name:'Vasija de barro',price:2800,emoji:'🏺',desc:'Cerámica tradicional'},{id:'p12',name:'Bolso aguayo',price:3200,emoji:'🎒',desc:'Tela andina'}],
+      gallery: [
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23A855F722"/><text x="100" y="110" font-size="70" text-anchor="middle">🎨</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23A855F733"/><text x="100" y="110" font-size="70" text-anchor="middle">🏺</text></svg>',
+        null, null
+      ],
+      visits: 28, favs: 11, rating: 4.7, ratingCount: 7, visitLog: [{visitor:'Martín G.',time:'Hace 4h'}]
+    },
+    { id: 'demo5', ownerId: 'demo', ownerName: 'Ana Gómez', bizName: 'Wellness Natural', category: 'Salud', city: 'Mendoza',
+      desc: 'Productos naturales para el bienestar. Aceites esenciales, cremas orgánicas y suplementos naturales.',
+      emoji: '💚', color: '#06D6A0', slogan: 'Bienestar que se siente', instagram: '@wellness_natural', whatsapp: '2614321234',
+      products: [{id:'p13',name:'Aceite esencial lavanda',price:1400,emoji:'🌿',desc:'30ml puro'},{id:'p14',name:'Crema hidratante',price:2100,emoji:'🧴',desc:'Aloe vera + argan'},{id:'p15',name:'Té antiestress x20',price:800,emoji:'🍵',desc:'Manzanilla + tilo'}],
+      gallery: [
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%2306D6A022"/><text x="100" y="110" font-size="70" text-anchor="middle">🌿</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%2306D6A033"/><text x="100" y="110" font-size="70" text-anchor="middle">🍵</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%2306D6A011"/><text x="100" y="110" font-size="70" text-anchor="middle">🧴</text></svg>',
+        null
+      ],
+      visits: 39, favs: 14, rating: 4.6, ratingCount: 11, visitLog: [{visitor:'Rosa V.',time:'Hace 2h'},{visitor:'Elena P.',time:'Ayer'}]
+    },
+    { id: 'demo6', ownerId: 'demo', ownerName: 'Roberto Silva', bizName: 'Casa & Deco RS', category: 'Hogar', city: 'Rosario',
+      desc: 'Decoración para el hogar con estilo. Cuadros, plantas artificiales, portavelas y más.',
+      emoji: '🏠', color: '#FFD166', slogan: 'Tu hogar, tu estilo', instagram: '@casadecors', whatsapp: '3414561234',
+      products: [{id:'p16',name:'Cuadro abstracto',price:3800,emoji:'🖼️',desc:'40x60cm impreso'},{id:'p17',name:'Portavela set x3',price:1600,emoji:'🕯️',desc:'Madera natural'},{id:'p18',name:'Cactus artificial',price:1100,emoji:'🌵',desc:'Con maceta incluida'}],
+      gallery: [
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23FFD16622"/><text x="100" y="110" font-size="70" text-anchor="middle">🏠</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23FFD16633"/><text x="100" y="110" font-size="70" text-anchor="middle">🕯️</text></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23FFD16611"/><text x="100" y="110" font-size="70" text-anchor="middle">🌵</text></svg>',
+        null
+      ],
+      visits: 22, favs: 7, rating: 4.4, ratingCount: 5, visitLog: [{visitor:'Jimena A.',time:'Ayer'}]
+    },
+  ];
+  // Preserve any entrepreneur-created stands while updating demo ones
+  const existing = DB.get('stands', []);
+  const userStands = existing.filter(s => !s.id.startsWith('demo'));
+  DB.set('stands', [...demo, ...userStands]);
+}
+
+// ==================== AUTH FUNCTIONS ====================
+function registerVisitor() {
+  const name = document.getElementById('vaName').value.trim();
+  const last = document.getElementById('vaLastName').value.trim();
+  const email = document.getElementById('vaEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('vaPass').value;
+  const city = document.getElementById('vaCity').value.trim();
+  const errEl = document.getElementById('vaError');
+  errEl.classList.remove('show');
+
+  if(!name||!last||!email||!pass||!city){ errEl.textContent='Completa todos los campos.'; errEl.classList.add('show'); return; }
+  if(pass.length<6){ errEl.textContent='La contraseña debe tener al menos 6 caracteres.'; errEl.classList.add('show'); return; }
+
+  const users = DB.get('visitors', []);
+  if(users.find(u=>u.email===email)){ errEl.textContent='Ya existe una cuenta con ese email.'; errEl.classList.add('show'); return; }
+
+  const now = new Date();
+  const user = {
+    id: 'v_'+Date.now(),
+    name, lastName: last, email, pass, city,
+    role: 'visitor',
+    points: 50,
+    joinDate: now.toISOString(),
+    lastVisit: now.toISOString(),
+    streak: 1,
+    totalVisits: 0,
+    favorites: [],
+    visitHistory: [],
+    ratings: {},
+    claimedReturnBonus: false,
+    badges: ['🌱 Nuevo miembro']
+  };
+  users.push(user);
+  DB.set('visitors', users);
+  currentUser = user;
+  currentRole = 'visitor';
+  DB.set('session', {id: user.id, role: 'visitor'});
+  fireworks(window.innerWidth/2, window.innerHeight/2);
+  toast('🎉 ¡Bienvenido! +50 puntos de bienvenida');
+  setTimeout(()=>enterFair(), 500);
+}
+
+function loginVisitor() {
+  const email = document.getElementById('vlEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('vlPass').value;
+  const errEl = document.getElementById('vlError');
+  errEl.classList.remove('show');
+
+  const users = DB.get('visitors', []);
+  const user = users.find(u=>u.email===email && u.pass===pass);
+  if(!user){ errEl.textContent='Email o contraseña incorrectos.'; errEl.classList.add('show'); return; }
+
+  currentUser = user;
+  currentRole = 'visitor';
+  DB.set('session', {id: user.id, role: 'visitor'});
+  updateReturnIncentive(user, users);
+  enterFair();
+}
+
+function updateReturnIncentive(user, users) {
+  const now = new Date();
+  const last = new Date(user.lastVisit);
+  const hoursDiff = (now - last) / 36e5;
+  const daysDiff = Math.floor((now - last) / 864e5);
+
+  // Update streak
+  if(daysDiff === 1) { user.streak = (user.streak||0) + 1; user.claimedReturnBonus = false; }
+  else if(daysDiff > 1) { user.streak = 1; user.claimedReturnBonus = false; }
+  // Same day - no streak change
+
+  // Return bonus available after 3+ hours
+  if(hoursDiff >= 3) user.claimedReturnBonus = false;
+
+  user.lastVisit = now.toISOString();
+  const idx = users.findIndex(u=>u.id===user.id);
+  if(idx>=0){ users[idx]=user; DB.set('visitors',users); }
+}
+
+function registerEntrepreneur() {
+  const name = document.getElementById('eaName').value.trim();
+  const last = document.getElementById('eaLastName').value.trim();
+  const email = document.getElementById('eaEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('eaPass').value;
+  const bizName = document.getElementById('eaBizName').value.trim();
+  const category = document.getElementById('eaCategory').value;
+  const city = document.getElementById('eaCity').value.trim();
+  const desc = document.getElementById('eaDesc').value.trim();
+  const errEl = document.getElementById('eaError');
+  errEl.classList.remove('show');
+
+  if(!name||!last||!email||!pass||!bizName||!category||!city){ errEl.textContent='Completa todos los campos obligatorios.'; errEl.classList.add('show'); return; }
+  if(pass.length<6){ errEl.textContent='La contraseña debe tener al menos 6 caracteres.'; errEl.classList.add('show'); return; }
+
+  const entr = DB.get('entrepreneurs', []);
+  if(entr.find(u=>u.email===email)){ errEl.textContent='Ya existe una cuenta con ese email.'; errEl.classList.add('show'); return; }
+
+  const standId = 'stand_'+Date.now();
+  const user = {
+    id: 'e_'+Date.now(),
+    name, lastName: last, email, pass, bizName, category, city,
+    role: 'entrepreneur', standId,
+    joinDate: new Date().toISOString()
+  };
+
+  const stand = {
+    id: standId, ownerId: user.id, ownerName: name+' '+last,
+    bizName, category, city, desc: desc||'',
+    emoji: '🚀', color: '#A855F7', slogan: '',
+    instagram: '', whatsapp: '',
+    products: [],
+    visits: 0, favs: 0, rating: 0, ratingCount: 0,
+    visitLog: [],
+    visitsByDay: [0,0,0,0,0,0,0]
+  };
+
+  entr.push(user);
+  DB.set('entrepreneurs', entr);
+  const stands = DB.get('stands', []);
+  stands.push(stand);
+  DB.set('stands', stands);
+
+  currentUser = user;
+  currentRole = 'entrepreneur';
+  DB.set('session', {id: user.id, role: 'entrepreneur'});
+  fireworks(window.innerWidth/2, window.innerHeight/2);
+  toast('🚀 ¡Stand creado! Ahora personalízalo');
+  setTimeout(()=>enterEntrepreneurDash(), 500);
+}
+
+function loginEntrepreneur() {
+  const email = document.getElementById('elEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('elPass').value;
+  const errEl = document.getElementById('elError');
+  errEl.classList.remove('show');
+
+  const entr = DB.get('entrepreneurs', []);
+  const user = entr.find(u=>u.email===email && u.pass===pass);
+  if(!user){ errEl.textContent='Email o contraseña incorrectos.'; errEl.classList.add('show'); return; }
+
+  currentUser = user;
+  currentRole = 'entrepreneur';
+  DB.set('session', {id: user.id, role: 'entrepreneur'});
+  enterEntrepreneurDash();
+}
+
+function logout() {
+  DB.del('session');
+  currentUser = null; currentRole = null;
+  gotoScreen('landing');
+  toast('👋 Hasta pronto');
+}
+
+// ==================== SESSION RESTORE ====================
+function restoreSession() {
+  const sess = DB.get('session');
+  if(!sess) return;
+  if(sess.role === 'visitor') {
+    const users = DB.get('visitors', []);
+    const user = users.find(u=>u.id===sess.id);
+    if(user){ currentUser=user; currentRole='visitor'; updateReturnIncentive(user,users); enterFair(); return; }
+  }
+  if(sess.role === 'entrepreneur') {
+    const entr = DB.get('entrepreneurs', []);
+    const user = entr.find(u=>u.id===sess.id);
+    if(user){ currentUser=user; currentRole='entrepreneur'; enterEntrepreneurDash(); return; }
+  }
+}
+
+// ==================== ENTER FAIR (VISITOR) ====================
+function enterFair() {
+  seedDemoStands();
+  gotoScreen('fairMain');
+  document.getElementById('fairMain').style.display='block';
+  document.getElementById('fairMain').classList.add('active');
+
+  // Nav
+  document.getElementById('navName').textContent = currentUser.name;
+  document.getElementById('navPoints').textContent = currentUser.points+' pts';
+  document.getElementById('navAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+
+  // Welcome banner (return visit)
+  const last = new Date(currentUser.lastVisit);
+  const hoursDiff = (Date.now() - last) / 36e5;
+  if(!currentUser.claimedReturnBonus && currentUser.totalVisits > 0) {
+    const bannerEl = document.getElementById('welcomeBanner');
+    bannerEl.style.display = 'block';
+    document.getElementById('wbTitle').textContent = `¡Volviste, ${currentUser.name}! 🎉`;
+    document.getElementById('wbSub').textContent = `Racha actual: ${currentUser.streak} día${currentUser.streak>1?'s':''} · ¡Tienes un bono por volver!`;
+  }
+
+  // Streak bar
+  renderStreak();
+  renderStands();
+  renderProfile();
+  switchTab('feria');
+}
+
+function claimReturnBonus() {
+  if(!currentUser) return;
+  const bonus = 25 + (currentUser.streak > 3 ? currentUser.streak * 5 : 0);
+  currentUser.points += bonus;
+  currentUser.claimedReturnBonus = true;
+  saveVisitorData();
+  document.getElementById('welcomeBanner').style.display='none';
+  fireworks(window.innerWidth/2, window.innerHeight/3);
+  toast(`🎁 +${bonus} puntos reclamados!`);
+  updateHUD();
+}
+
+function renderStreak() {
+  const bar = document.getElementById('streakBar');
+  bar.innerHTML = '';
+  const days = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const streak = currentUser.streak || 1;
+  const today = new Date().getDay(); // 0=Sun
+  for(let i=0;i<7;i++){
+    const d = document.createElement('div');
+    d.className = 'streak-day';
+    const dayIdx = i;
+    const isDone = i < Math.min(streak-1, 7);
+    const isToday = dayIdx === (today === 0 ? 6 : today-1);
+    if(isDone) d.classList.add('done');
+    if(isToday) d.classList.add('today');
+    d.innerHTML = `${isDone||isToday ? '🔥' : '○'}<span class="streak-label">${days[i]}</span>`;
+    bar.appendChild(d);
+  }
+}
+
+// ==================== STANDS RENDERING ====================
+let activeCategory = 'Todos';
+
+function renderStands(filter='', category='Todos') {
+  const stands = DB.get('stands', []);
+  const grid = document.getElementById('standsGrid');
+  const emptyEl = document.getElementById('standsEmpty');
+  grid.innerHTML = '';
+  
+  let filtered = stands;
+  if(category !== 'Todos') filtered = filtered.filter(s=>s.category===category);
+  if(filter) filtered = filtered.filter(s=>
+    s.bizName.toLowerCase().includes(filter.toLowerCase()) ||
+    s.desc.toLowerCase().includes(filter.toLowerCase()) ||
+    s.ownerName.toLowerCase().includes(filter.toLowerCase()) ||
+    s.products?.some(p=>p.name.toLowerCase().includes(filter.toLowerCase()))
+  );
+
+  document.getElementById('standsCount').textContent = `${filtered.length} stand${filtered.length!==1?'s':''} disponible${filtered.length!==1?'s':''}`;
+
+  if(filtered.length === 0){ emptyEl.style.display='block'; return; }
+  emptyEl.style.display='none';
+
+  filtered.forEach((stand, idx) => {
+    const card = document.createElement('div');
+    card.className = 'stand-card';
+    card.style.setProperty('--accent', stand.color||'#A855F7');
+    card.style.animationDelay = (idx*0.07)+'s';
+    const catColors = {
+      'Gastronomía':'#FF6B35','Moda':'#F72585','Artesanías':'#A855F7',
+      'Tecnología':'#118AB2','Salud':'#06D6A0','Hogar':'#FFD166',
+      'Arte':'#EF476F','Servicios':'#8B5CF6','default':'#888'
+    };
+    const catColor = catColors[stand.category] || catColors.default;
+    const stars = stand.ratingCount > 0 ? '⭐ '+stand.rating.toFixed(1) : '⭐ Nuevo';
+    const isOwn = currentRole==='entrepreneur' && currentUser?.standId===stand.id;
+    card.innerHTML = `
+      <div class="stand-banner shimmer" style="background:linear-gradient(135deg, ${stand.color||'#A855F7'}33, ${stand.color||'#A855F7'}11);">
+        <span class="stand-banner-emoji">${stand.emoji||'🏪'}</span>
+        <div class="stand-category-badge" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}44;">${stand.category}</div>
+        ${isOwn ? '<div style="position:absolute;top:10px;left:10px;background:rgba(255,209,102,.9);color:#000;font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:10px;">✏️ Mi stand</div>' : ''}
+      </div>
+      <div class="stand-body">
+        <div class="stand-name">${stand.bizName}</div>
+        <div class="stand-vendor">👤 ${stand.ownerName} · 📍 ${stand.city}</div>
+        <div class="stand-desc">${stand.desc||'¡Visítanos y descubre nuestros productos!'}</div>
+        <div class="stand-footer">
+          <span class="stand-rating">${stars} <span style="color:rgba(255,255,255,.4);font-size:.75rem;">(${stand.ratingCount})</span></span>
+          <span class="stand-visits">👁️ ${stand.visits}</span>
+          <button class="btn stand-btn btn-sm" style="background:${stand.color||'#A855F7'};color:#fff;" onclick="openStand('${stand.id}',event)">Ver stand →</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Also render for entrepreneur view
+  const gridEnt = document.getElementById('standsGridEnt');
+  if(gridEnt) { gridEnt.innerHTML = grid.innerHTML; }
+}
+
+function filterStands() {
+  renderStands(document.getElementById('searchInput').value, activeCategory);
+}
+function filterStandsEnt() {
+  renderStands(document.getElementById('searchInputEnt').value, 'Todos');
+}
+
+function filterByCategory(cat, el) {
+  activeCategory = cat;
+  document.querySelectorAll('#filterChips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  filterStands();
+}
+
+// ==================== OPEN STAND ====================
+function openStand(standId, event) {
+  if(event) event.stopPropagation();
+  const stands = DB.get('stands', []);
+  const stand = stands.find(s=>s.id===standId);
+  if(!stand) return;
+
+  currentViewStandId = standId;
+
+  // Register visit
+  if(currentRole === 'visitor') {
+    stand.visits = (stand.visits||0)+1;
+    if(!stand.visitLog) stand.visitLog=[];
+    stand.visitLog.unshift({visitor: currentUser.name+' '+currentUser.lastName[0]+'.', time:'Ahora'});
+    if(stand.visitLog.length > 20) stand.visitLog.pop();
+
+    // Award points for visiting
+    const alreadyVisited = currentUser.visitHistory?.some(v=>v.standId===standId);
+    if(!alreadyVisited) {
+      currentUser.points += 10;
+      currentUser.totalVisits = (currentUser.totalVisits||0)+1;
+      if(!currentUser.visitHistory) currentUser.visitHistory=[];
+      currentUser.visitHistory.unshift({standId, name:stand.bizName, emoji:stand.emoji, time: new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})});
+      if(currentUser.visitHistory.length>50) currentUser.visitHistory.pop();
+      toast(`+10 pts por visitar ${stand.bizName}!`);
+    }
+    checkBadges();
+    saveVisitorData();
+    updateHUD();
+
+    // Update visitsByDay for entrepreneur
+    const day = new Date().getDay();
+    if(!stand.visitsByDay) stand.visitsByDay=[0,0,0,0,0,0,0];
+    stand.visitsByDay[day] = (stand.visitsByDay[day]||0)+1;
+
+    const allStands = DB.get('stands',[]);
+    const idx = allStands.findIndex(s=>s.id===standId);
+    if(idx>=0) allStands[idx]=stand;
+    DB.set('stands', allStands);
+  }
+
+  // Fill modal
+  const modal = document.getElementById('standModal');
+  document.getElementById('modalBanner').style.background = `linear-gradient(135deg, ${stand.color||'#A855F7'}44, ${stand.color||'#A855F7'}11)`;
+  document.getElementById('modalEmoji').textContent = stand.emoji||'🏪';
+  document.getElementById('modalName').textContent = stand.bizName;
+  document.getElementById('modalMeta').textContent = `👤 ${stand.ownerName} · 📍 ${stand.city} · ${stand.category}`;
+  document.getElementById('modalDesc').textContent = stand.desc||'';
+
+  // Social links
+  const socialEl = document.getElementById('modalSocial');
+  socialEl.innerHTML='';
+  if(stand.instagram){ socialEl.innerHTML+=`<a href="https://instagram.com/${stand.instagram.replace('@','')}" target="_blank" class="btn btn-sm btn-outline">📸 ${stand.instagram}</a>`; }
+  if(stand.whatsapp){ socialEl.innerHTML+=`<a href="https://wa.me/54${stand.whatsapp}" target="_blank" class="btn btn-sm" style="background:#25D366;color:#fff;">💬 WhatsApp</a>`; }
+
+  // Rating
+  const myRating = currentUser?.ratings?.[standId];
+  const starsEl = document.getElementById('ratingStars');
+  starsEl.querySelectorAll('.rating-star').forEach((s,i)=>{
+    s.textContent = i < (myRating||0) ? '⭐' : '☆';
+  });
+  document.getElementById('ratingMsg').textContent = myRating ? `Tu calificación: ${'⭐'.repeat(myRating)}` : 'Califica este stand';
+  document.getElementById('modalRatingDisplay').textContent = stand.ratingCount>0 ? `⭐ ${stand.rating.toFixed(1)} (${stand.ratingCount})` : 'Sin calificaciones';
+
+  // Gallery + WhatsApp
+  renderModalGalleryAndWA(stand);
+
+  // Favorite btn
+  const favBtn = document.getElementById('favBtn');
+  const isFav = currentUser?.favorites?.includes(standId);
+  favBtn.textContent = isFav ? '💔 Quitar' : '❤️ Favorito';
+  favBtn.style.borderColor = isFav ? '#EF476F' : '';
+
+  // Products
+  const prodsEl = document.getElementById('modalProducts');
+  prodsEl.innerHTML = '';
+  if(stand.products && stand.products.length > 0) {
+    stand.products.forEach(p=>{
+      const pc = document.createElement('div');
+      pc.className = 'product-card';
+      pc.innerHTML = `<div class="product-emoji">${p.emoji||'📦'}</div><div class="product-name">${p.name}</div><div class="product-price">$${Number(p.price).toLocaleString('es-AR')}</div>${p.desc?`<div style="font-size:.75rem;color:var(--muted);margin-top:4px;">${p.desc}</div>`:''}`;
+      prodsEl.appendChild(pc);
+    });
+  } else {
+    prodsEl.innerHTML='<p style="color:var(--muted);font-size:.85rem;grid-column:1/-1;">Pronto habrá productos disponibles</p>';
+  }
+
+  modal.classList.add('open');
+  if(event) fireworks(event.clientX, event.clientY);
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function toggleFavorite() {
+  if(!currentUser || currentRole!=='visitor') { toast('Inicia sesión como visitante primero'); return; }
+  if(!currentViewStandId) return;
+  if(!currentUser.favorites) currentUser.favorites=[];
+  const idx = currentUser.favorites.indexOf(currentViewStandId);
+  const stands = DB.get('stands',[]);
+  const sIdx = stands.findIndex(s=>s.id===currentViewStandId);
+  if(idx>=0){
+    currentUser.favorites.splice(idx,1);
+    if(sIdx>=0) stands[sIdx].favs = Math.max(0,(stands[sIdx].favs||0)-1);
+    document.getElementById('favBtn').textContent='❤️ Favorito';
+    document.getElementById('favBtn').style.borderColor='';
+    toast('Eliminado de favoritos');
+  } else {
+    currentUser.favorites.push(currentViewStandId);
+    if(sIdx>=0) stands[sIdx].favs = (stands[sIdx].favs||0)+1;
+    document.getElementById('favBtn').textContent='💔 Quitar';
+    document.getElementById('favBtn').style.borderColor='#EF476F';
+    currentUser.points += 5;
+    toast('❤️ Guardado en favoritos +5 pts');
+    fireworks(window.innerWidth/2, window.innerHeight/2);
+  }
+  DB.set('stands', stands);
+  checkBadges();
+  saveVisitorData();
+  updateHUD();
+}
+
+function rateStand(stars) {
+  if(!currentUser || currentRole!=='visitor') return;
+  if(!currentViewStandId) return;
+  if(!currentUser.ratings) currentUser.ratings={};
+  const prev = currentUser.ratings[currentViewStandId];
+  currentUser.ratings[currentViewStandId] = stars;
+
+  const stands = DB.get('stands',[]);
+  const sIdx = stands.findIndex(s=>s.id===currentViewStandId);
+  if(sIdx>=0){
+    const stand = stands[sIdx];
+    if(!prev){ stand.ratingCount = (stand.ratingCount||0)+1; }
+    const total = (stand.rating * (prev ? stand.ratingCount : stand.ratingCount-1)) - (prev||0) + stars;
+    stand.rating = total / stand.ratingCount;
+    stands[sIdx]=stand;
+    DB.set('stands',stands);
+    document.getElementById('modalRatingDisplay').textContent = `⭐ ${stand.rating.toFixed(1)} (${stand.ratingCount})`;
+  }
+
+  const starsEl = document.getElementById('ratingStars');
+  starsEl.querySelectorAll('.rating-star').forEach((s,i)=>{ s.textContent = i < stars ? '⭐' : '☆'; });
+  document.getElementById('ratingMsg').textContent = `Tu calificación: ${'⭐'.repeat(stars)}`;
+  if(!prev){ currentUser.points+=3; toast('⭐ Gracias por calificar +3 pts'); updateHUD(); }
+  saveVisitorData();
+}
+
+// ==================== HUD UPDATE ====================
+function updateHUD() {
+  if(currentRole==='visitor' && currentUser){
+    document.getElementById('navPoints').textContent = currentUser.points+' pts';
+    document.getElementById('profilePoints').textContent = currentUser.points;
+    renderLevelProgress();
+    renderRewards();
+  }
+}
+
+// ==================== TABS ====================
+function switchTab(tab) {
+  ['feria','profile'].forEach(t=>{
+    const el = document.getElementById('tab-'+t);
+    const btn = document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(el) el.style.display = t===tab ? 'block' : 'none';
+    if(btn) btn.classList.toggle('active', t===tab);
+  });
+  if(tab==='profile') renderProfile();
+}
+
+function switchEntrepTab(tab) {
+  ['eDash','eStand','eFeria'].forEach(t=>{
+    const el = document.getElementById('tab-'+t);
+    const btnId = 'etab'+t.charAt(1).toUpperCase()+t.slice(2);
+    const btn = document.getElementById(btnId);
+    if(el) el.style.display = t===tab ? 'block' : 'none';
+    if(btn) btn.classList.toggle('active', t===tab);
+  });
+  if(tab==='eDash') renderEntrepDash();
+  if(tab==='eStand') { renderMyStand(); setTimeout(loadGalleryEditor, 50); }
+  if(tab==='eFeria') { renderStandsEnt(); updateMyStandPreview(); }
+}
+
+// ==================== PROFILE ====================
+function renderProfile() {
+  if(!currentUser) return;
+  document.getElementById('profileAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('profileName').textContent = currentUser.name+' '+currentUser.lastName;
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('profileCity').textContent = '📍 '+currentUser.city;
+  document.getElementById('profilePoints').textContent = currentUser.points;
+  document.getElementById('memberSince').textContent = new Date(currentUser.joinDate).toLocaleDateString('es-AR');
+
+  // Badges
+  const badgesEl = document.getElementById('profileBadges');
+  badgesEl.innerHTML = (currentUser.badges||[]).map(b=>`<span class="badge">${b}</span>`).join('');
+
+  renderLevelProgress();
+  renderRewards();
+
+  // Favorites
+  const favs = currentUser.favorites||[];
+  const favGrid = document.getElementById('favoritesGrid');
+  const favEmpty = document.getElementById('favEmpty');
+  favGrid.innerHTML='';
+  if(favs.length===0){ favGrid.style.display='none'; favEmpty.style.display='block'; }
+  else {
+    favGrid.style.display='grid'; favEmpty.style.display='none';
+    const stands = DB.get('stands',[]);
+    favs.forEach(id=>{
+      const stand = stands.find(s=>s.id===id);
+      if(!stand) return;
+      const fc = document.createElement('div');
+      fc.className = 'fav-card';
+      const visitCount = (currentUser.visitHistory||[]).filter(v=>v.standId===id).length;
+      fc.innerHTML=`<div class="fav-emoji">${stand.emoji}</div><div><div class="fav-name">${stand.bizName}</div><div class="fav-visits">👁️ ${visitCount} visita${visitCount!==1?'s':''}</div></div>`;
+      fc.onclick = () => openStand(id);
+      favGrid.appendChild(fc);
+    });
+  }
+
+  // Visit history
+  const hist = currentUser.visitHistory||[];
+  const histEl = document.getElementById('visitHistory');
+  const histEmpty = document.getElementById('histEmpty');
+  if(hist.length===0){ histEl.innerHTML=''; histEmpty.style.display='block'; }
+  else {
+    histEmpty.style.display='none';
+    histEl.innerHTML = hist.slice(0,15).map(v=>`
+      <div class="visit-item">
+        <div class="visit-dot"></div>
+        <span style="font-size:1.2rem;">${v.emoji}</span>
+        <span><strong>${v.name}</strong></span>
+        <span style="margin-left:auto;color:var(--muted);">${v.time}</span>
+      </div>
+    `).join('');
+  }
+}
+
+function renderLevelProgress() {
+  const pts = currentUser.points;
+  const levels = [
+    {name:'Explorador',min:0,max:100,id:'lvl1'},
+    {name:'Regular',min:100,max:300,id:'lvl2'},
+    {name:'Feriante',min:300,max:700,id:'lvl3'},
+    {name:'VIP',min:700,max:1500,id:'lvl4'},
+    {name:'Leyenda',min:1500,max:Infinity,id:'lvl5'}
+  ];
+  const current = levels.filter(l=>pts>=l.min).pop() || levels[0];
+  const next = levels[levels.indexOf(current)+1];
+  document.getElementById('levelName').textContent = current.name;
+  if(next){
+    const pct = Math.min(100, ((pts-current.min)/(next.min-current.min))*100);
+    document.getElementById('levelFill').style.width = pct+'%';
+    document.getElementById('levelProgress').textContent = `${pts}/${next.min} pts`;
+  } else {
+    document.getElementById('levelFill').style.width = '100%';
+    document.getElementById('levelProgress').textContent = `${pts} pts · ¡Nivel máximo!`;
+  }
+  levels.forEach(l=>{
+    const el = document.getElementById(l.id);
+    if(el) el.classList.toggle('unlocked', pts>=l.min);
+  });
+}
+
+function renderRewards() {
+  const pts = currentUser.points;
+  const rewardsEl = document.getElementById('rewardsGrid');
+  const rewards = [
+    {icon:'🎟️',name:'Visita Prioritaria',pts:100,desc:'Acceso preferencial a nuevos stands',type:'visit'},
+    {icon:'💰',name:'Descuento 10%',pts:200,desc:'Válido en cualquier stand de la feria',type:'discount'},
+    {icon:'🎁',name:'Sorpresa VIP',pts:500,desc:'Paquete exclusivo de la feria',type:'gift'},
+    {icon:'👑',name:'Stand VIP Badge',pts:1000,desc:'Badge exclusivo en tu perfil',type:'badge'},
+    {icon:'🌟',name:'Pack Leyenda',pts:2000,desc:'Todos los beneficios premium',type:'legend'},
+  ];
+  rewardsEl.innerHTML = rewards.map(r=>{
+    const canClaim = pts >= r.pts;
+    const claimed = (currentUser.claimedRewards||[]).includes(r.type);
+    return `
+      <div style="background:var(--surface2);border:1px solid ${canClaim?'var(--gold)':'var(--border)'};border-radius:12px;padding:14px;opacity:${canClaim?1:0.5};">
+        <div style="font-size:2rem;margin-bottom:6px;">${r.icon}</div>
+        <div style="font-weight:700;font-size:.9rem;margin-bottom:2px;">${r.name}</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:10px;">${r.desc}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="color:var(--gold);font-size:.8rem;font-weight:700;">${r.pts} pts</span>
+          ${claimed ? '<span style="color:var(--teal);font-size:.75rem;">✓ Obtenido</span>' :
+            canClaim ? `<button class="btn btn-sm btn-gold" onclick="claimReward('${r.type}')">Reclamar</button>` :
+            `<span style="font-size:.75rem;color:var(--muted);">Faltan ${r.pts-pts} pts</span>`}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function claimReward(type) {
+  if(!currentUser.claimedRewards) currentUser.claimedRewards=[];
+  if(currentUser.claimedRewards.includes(type)) return;
+  currentUser.claimedRewards.push(type);
+  const badge = {visit:'🎟️ VIP',discount:'💰 Descuento',gift:'🎁 VIP',badge:'👑 Leyenda',legend:'🌟 Legend'};
+  if(!currentUser.badges) currentUser.badges=[];
+  if(!currentUser.badges.includes(badge[type])) currentUser.badges.push(badge[type]);
+  saveVisitorData();
+  renderRewards();
+  renderProfile();
+  fireworks(window.innerWidth/2, window.innerHeight/2);
+  toast('🎉 ¡Recompensa reclamada!');
+}
+
+function checkBadges() {
+  if(!currentUser) return;
+  const badges = currentUser.badges || [];
+  const adds = [];
+  if((currentUser.totalVisits||0)>=1 && !badges.includes('🌱 Nuevo miembro')) adds.push('🌱 Nuevo miembro');
+  if((currentUser.totalVisits||0)>=5 && !badges.includes('👣 Explorador')) adds.push('👣 Explorador');
+  if((currentUser.totalVisits||0)>=15 && !badges.includes('🏃 Feriante activo')) adds.push('🏃 Feriante activo');
+  if((currentUser.favorites||[]).length>=3 && !badges.includes('❤️ Coleccionista')) adds.push('❤️ Coleccionista');
+  if((currentUser.streak||0)>=3 && !badges.includes('🔥 Racha x3')) adds.push('🔥 Racha x3');
+  if(adds.length>0){
+    currentUser.badges = [...(currentUser.badges||[]),...adds];
+    adds.forEach(b=>{ setTimeout(()=>toast(`🏅 Nuevo logro: ${b}`), 600); });
+  }
+}
+
+// ==================== SAVE DATA ====================
+function saveVisitorData() {
+  const users = DB.get('visitors',[]);
+  const idx = users.findIndex(u=>u.id===currentUser.id);
+  if(idx>=0) users[idx]=currentUser;
+  DB.set('visitors', users);
+}
+
+// ==================== ENTREPRENEUR DASH ====================
+function enterEntrepreneurDash() {
+  gotoScreen('entrepreneurDash');
+  document.getElementById('entrepreneurDash').style.display='block';
+  document.getElementById('entrepreneurDash').classList.add('active');
+  document.getElementById('entNavName').textContent = currentUser.name;
+  document.getElementById('entHelloName').textContent = currentUser.name;
+  renderEntrepDash();
+  renderMyStand();
+  initStandForm();
+  switchEntrepTab('eDash');
+}
+
+function renderEntrepDash() {
+  if(!currentUser) return;
+  const stands = DB.get('stands',[]);
+  const stand = stands.find(s=>s.id===currentUser.standId);
+  if(!stand) return;
+
+  document.getElementById('statVisits').textContent = stand.visits||0;
+  document.getElementById('statFavs').textContent = stand.favs||0;
+  document.getElementById('statProds').textContent = (stand.products||[]).length;
+  document.getElementById('statRating').textContent = stand.ratingCount>0 ? stand.rating.toFixed(1) : '-';
+
+  // Chart
+  const bars = document.getElementById('visitsChart');
+  const labels = document.getElementById('chartLabels');
+  bars.innerHTML=''; labels.innerHTML='';
+  const days = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const data = stand.visitsByDay || [0,0,0,0,0,0,0];
+  const maxVal = Math.max(...data, 1);
+  data.forEach((val, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    bar.style.height = `${(val/maxVal)*90+5}%`;
+    bar.setAttribute('data-val', val);
+    bars.appendChild(bar);
+    const lbl = document.createElement('span');
+    lbl.textContent = days[i];
+    labels.appendChild(lbl);
+  });
+
+  // Visit log
+  const logEl = document.getElementById('entVisitLog');
+  const logEmpty = document.getElementById('entLogEmpty');
+  const log = stand.visitLog||[];
+  if(log.length===0){ logEl.innerHTML=''; logEmpty.style.display='block'; return; }
+  logEmpty.style.display='none';
+  logEl.innerHTML = log.map(v=>`
+    <div class="visit-item">
+      <div class="visit-dot"></div>
+      <span>👤 ${v.visitor}</span>
+      <span style="margin-left:auto;color:var(--muted);">${v.time}</span>
+    </div>
+  `).join('');
+}
+
+// ==================== MY STAND CONFIG ====================
+const standEmojis = ['🚀','🍕','👗','🎨','💻','💚','🏠','🖼️','⚡','🛍️','🌸','🔥','💎','🎭','🧁','🌿','📱','🎵','🌈','🎪'];
+const standColors = ['#A855F7','#EF476F','#FF6B35','#FFD166','#06D6A0','#118AB2','#F72585','#10B981','#F59E0B','#3B82F6'];
+
+function initStandForm() {
+  const stands = DB.get('stands',[]);
+  const stand = stands.find(s=>s.id===currentUser.standId);
+  if(!stand) return;
+
+  document.getElementById('standNameInput').value = stand.bizName||'';
+  document.getElementById('standSloganInput').value = stand.slogan||'';
+  document.getElementById('standDescInput').value = stand.desc||'';
+  document.getElementById('standInstagram').value = stand.instagram||'';
+  document.getElementById('standWhatsapp').value = stand.whatsapp||'';
+
+  // Emoji picker
+  const epRow = document.getElementById('standEmojiPicker');
+  epRow.innerHTML = standEmojis.map(e=>`<div class="emoji-opt ${e===stand.emoji?'selected':''}" onclick="selectEmoji(this,'${e}')">${e}</div>`).join('');
+
+  // Color picker
+  const cpRow = document.getElementById('standColorPicker');
+  cpRow.innerHTML = standColors.map(c=>`<div class="color-opt ${c===stand.color?'selected':''}" style="background:${c};" onclick="selectColor(this,'${c}')"></div>`).join('');
+
+  // Load existing gallery photos
+  setTimeout(loadGalleryEditor, 60);
+}
+
+window.selectEmoji = function(el,emoji){
+  document.querySelectorAll('.emoji-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+};
+window.selectColor = function(el,color){
+  document.querySelectorAll('.color-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+};
+
+function saveStandConfig() {
+  const stands = DB.get('stands',[]);
+  const idx = stands.findIndex(s=>s.id===currentUser.standId);
+  if(idx<0) return;
+  const selectedEmoji = document.querySelector('.emoji-opt.selected')?.textContent || stands[idx].emoji;
+  const selectedColor = document.querySelector('.color-opt.selected')?.style?.backgroundColor || stands[idx].color;
+
+  stands[idx].bizName = document.getElementById('standNameInput').value.trim() || stands[idx].bizName;
+  stands[idx].slogan = document.getElementById('standSloganInput').value.trim();
+  stands[idx].desc = document.getElementById('standDescInput').value.trim();
+  stands[idx].emoji = selectedEmoji;
+  stands[idx].color = selectedColor;
+  stands[idx].instagram = document.getElementById('standInstagram').value.trim();
+  stands[idx].whatsapp = document.getElementById('standWhatsapp').value.trim();
+  DB.set('stands', stands);
+
+  // Update entrepreneur biz name
+  const entr = DB.get('entrepreneurs',[]);
+  const eidx = entr.findIndex(e=>e.id===currentUser.id);
+  if(eidx>=0){ entr[eidx].bizName = stands[idx].bizName; DB.set('entrepreneurs',entr); currentUser.bizName=stands[idx].bizName; }
+
+  toast('💾 Stand actualizado');
+  fireworks(window.innerWidth/2, window.innerHeight/2);
+  updateMyStandPreview();
+}
+
+function updateMyStandPreview() {
+  const stands = DB.get('stands',[]);
+  const stand = stands.find(s=>s.id===currentUser?.standId);
+  if(!stand) return;
+  document.getElementById('mspEmoji').textContent = stand.emoji||'🚀';
+  document.getElementById('mspName').textContent = stand.bizName;
+}
+
+// ==================== PRODUCTS ====================
+function renderMyStand() {
+  const stands = DB.get('stands',[]);
+  const stand = stands.find(s=>s.id===currentUser?.standId);
+  if(!stand) return;
+  const listEl = document.getElementById('myProductsList');
+  const empty = document.getElementById('prodsEmpty');
+  const prods = stand.products||[];
+  if(prods.length===0){ listEl.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  listEl.innerHTML = prods.map(p=>`
+    <div class="product-list-item">
+      <div class="pli-emoji">${p.emoji||'📦'}</div>
+      <div><div class="pli-name">${p.name}</div><div class="pli-price">$${Number(p.price).toLocaleString('es-AR')}</div></div>
+      <div class="pli-actions">
+        <button class="btn btn-sm btn-outline" onclick="editProduct('${p.id}')">✏️</button>
+        <button class="btn btn-sm btn-red" onclick="deleteProduct('${p.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('statProds').textContent = prods.length;
+}
+
+function openAddProduct() {
+  editProductId = null;
+  document.getElementById('addProdTitle').textContent = 'Agregar producto';
+  document.getElementById('prodName').value='';
+  document.getElementById('prodPrice').value='';
+  document.getElementById('prodEmoji').value='📦';
+  document.getElementById('prodDesc').value='';
+  document.getElementById('addProductModal').classList.add('open');
+}
+
+function editProduct(id) {
+  const stands = DB.get('stands',[]);
+  const stand = stands.find(s=>s.id===currentUser.standId);
+  const prod = stand?.products?.find(p=>p.id===id);
+  if(!prod) return;
+  editProductId = id;
+  document.getElementById('addProdTitle').textContent = 'Editar producto';
+  document.getElementById('prodName').value = prod.name;
+  document.getElementById('prodPrice').value = prod.price;
+  document.getElementById('prodEmoji').value = prod.emoji||'📦';
+  document.getElementById('prodDesc').value = prod.desc||'';
+  document.getElementById('addProductModal').classList.add('open');
+}
+
+function saveProduct() {
+  const name = document.getElementById('prodName').value.trim();
+  const price = document.getElementById('prodPrice').value;
+  const emoji = document.getElementById('prodEmoji').value.trim()||'📦';
+  const desc = document.getElementById('prodDesc').value.trim();
+  if(!name||!price){ toast('Completa nombre y precio'); return; }
+
+  const stands = DB.get('stands',[]);
+  const idx = stands.findIndex(s=>s.id===currentUser.standId);
+  if(idx<0) return;
+  if(!stands[idx].products) stands[idx].products=[];
+
+  if(editProductId) {
+    const pidx = stands[idx].products.findIndex(p=>p.id===editProductId);
+    if(pidx>=0) stands[idx].products[pidx] = {id:editProductId,name,price:Number(price),emoji,desc};
+  } else {
+    stands[idx].products.push({id:'p_'+Date.now(),name,price:Number(price),emoji,desc});
+  }
+  DB.set('stands', stands);
+  closeModal('addProductModal');
+  renderMyStand();
+  toast(editProductId ? '✏️ Producto actualizado' : '📦 Producto agregado');
+  editProductId=null;
+}
+
+function deleteProduct(id) {
+  const stands = DB.get('stands',[]);
+  const idx = stands.findIndex(s=>s.id===currentUser.standId);
+  if(idx<0) return;
+  stands[idx].products = stands[idx].products.filter(p=>p.id!==id);
+  DB.set('stands', stands);
+  renderMyStand();
+  toast('🗑️ Producto eliminado');
+}
+
+function renderStandsEnt() {
+  const stands = DB.get('stands',[]);
+  const grid = document.getElementById('standsGridEnt');
+  if(!grid) return;
+  grid.innerHTML='';
+  stands.forEach((stand,idx) => {
+    const card = document.createElement('div');
+    card.className = 'stand-card';
+    card.style.setProperty('--accent', stand.color||'#A855F7');
+    card.style.animationDelay = (idx*0.07)+'s';
+    const stars = stand.ratingCount > 0 ? '⭐ '+stand.rating.toFixed(1) : '⭐ Nuevo';
+    const isOwn = currentUser?.standId===stand.id;
+    card.innerHTML = `
+      <div class="stand-banner shimmer" style="background:linear-gradient(135deg, ${stand.color||'#A855F7'}33, ${stand.color||'#A855F7'}11);">
+        <span class="stand-banner-emoji">${stand.emoji||'🏪'}</span>
+        ${isOwn ? '<div style="position:absolute;top:10px;left:10px;background:rgba(255,209,102,.9);color:#000;font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:10px;">✏️ Mi stand</div>' : ''}
+      </div>
+      <div class="stand-body">
+        <div class="stand-name">${stand.bizName}</div>
+        <div class="stand-vendor">👤 ${stand.ownerName} · 📍 ${stand.city}</div>
+        <div class="stand-desc">${stand.desc||'Visítanos y descubre nuestros productos'}</div>
+        <div class="stand-footer">
+          <span class="stand-rating">${stars}</span>
+          <span class="stand-visits">👁️ ${stand.visits}</span>
+          <button class="btn stand-btn btn-sm" style="background:${stand.color||'#A855F7'};color:#fff;" onclick="openStand('${stand.id}',event)">Ver →</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ==================== KEYBOARD ====================
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape'){
+    document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));
+  }
+});
+
+// ==================== GALLERY FUNCTIONS ====================
+function triggerPhotoUpload(slot) {
+  document.getElementById('photoInput' + slot).click();
+}
+
+function handlePhotoUpload(slot, input) {
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 4 * 1024 * 1024) { toast('⚠️ La imagen no debe superar 4MB'); return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const base64 = e.target.result;
+    const stands = DB.get('stands', []);
+    const idx = stands.findIndex(s => s.id === currentUser.standId);
+    if(idx < 0) return;
+    if(!stands[idx].gallery) stands[idx].gallery = [null, null, null, null];
+    stands[idx].gallery[slot] = base64;
+    DB.set('stands', stands);
+    renderGallerySlot(slot, base64);
+    toast('📸 Foto guardada');
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderGallerySlot(slot, src) {
+  const editor = document.getElementById('galleryEditor');
+  if(!editor) return;
+  const slotEl = editor.children[slot];
+  if(!slotEl) return;
+  const oldImg = slotEl.querySelector('img');
+  if(oldImg) oldImg.remove();
+  const icon = slotEl.querySelector('.gs-icon');
+  const label = slotEl.querySelector('.gs-label');
+  if(icon) icon.style.display = 'none';
+  if(label) label.style.display = 'none';
+  const img = document.createElement('img');
+  img.src = src;
+  slotEl.insertBefore(img, slotEl.firstChild);
+}
+
+function removePhoto(event, slot) {
+  event.stopPropagation();
+  const stands = DB.get('stands', []);
+  const idx = stands.findIndex(s => s.id === currentUser.standId);
+  if(idx < 0) return;
+  if(!stands[idx].gallery) stands[idx].gallery = [null, null, null, null];
+  stands[idx].gallery[slot] = null;
+  DB.set('stands', stands);
+  const editor = document.getElementById('galleryEditor');
+  if(!editor) return;
+  const slotEl = editor.children[slot];
+  if(!slotEl) return;
+  const oldImg = slotEl.querySelector('img');
+  if(oldImg) oldImg.remove();
+  const icon = slotEl.querySelector('.gs-icon');
+  const label = slotEl.querySelector('.gs-label');
+  if(icon) icon.style.display = '';
+  if(label) label.style.display = '';
+  document.getElementById('photoInput' + slot).value = '';
+  toast('\uD83D\uDDD1\uFE0F Foto eliminada');
+}
+
+function loadGalleryEditor() {
+  const stands = DB.get('stands', []);
+  const stand = stands.find(s => s.id === currentUser?.standId);
+  if(!stand || !stand.gallery) return;
+  stand.gallery.forEach((src, i) => { if(src) renderGallerySlot(i, src); });
+}
+
+// ==================== LIGHTBOX ====================
+let lightboxImages = [];
+let lightboxCurrent = 0;
+
+function openLightbox(images, startIdx) {
+  lightboxImages = images.filter(Boolean);
+  if(!lightboxImages.length) return;
+  lightboxCurrent = Math.min(startIdx, lightboxImages.length - 1);
+  document.getElementById('lightboxImg').src = lightboxImages[lightboxCurrent];
+  const nav = document.getElementById('lightboxNav');
+  nav.innerHTML = lightboxImages.map((_, i) =>
+    `<div class="lightbox-dot ${i===lightboxCurrent?'active':''}" onclick="event.stopPropagation();goLightbox(${i})"></div>`
+  ).join('');
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function goLightbox(idx) {
+  lightboxCurrent = idx;
+  document.getElementById('lightboxImg').src = lightboxImages[idx];
+  document.querySelectorAll('.lightbox-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+}
+
+function closeLightbox(event) {
+  if(event && event.target !== document.getElementById('lightbox') && !event.target.classList.contains('lightbox-close')) return;
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+document.addEventListener('keydown', e2 => {
+  const lb = document.getElementById('lightbox');
+  if(!lb.classList.contains('open')) return;
+  if(e2.key === 'ArrowRight') goLightbox((lightboxCurrent+1) % lightboxImages.length);
+  if(e2.key === 'ArrowLeft')  goLightbox((lightboxCurrent - 1 + lightboxImages.length) % lightboxImages.length);
+  if(e2.key === 'Escape') lb.classList.remove('open');
+});
+
+// ==================== WHATSAPP CONSULT ====================
+function buildWhatsAppURL(stand) {
+  if(!stand.whatsapp) return null;
+  const num = stand.whatsapp.replace(/\D/g, '');
+  const fullNum = num.startsWith('54') ? num : '54' + num;
+  const visitorName = currentUser ? `${currentUser.name} ${currentUser.lastName}` : 'un visitante de FeriaVirtual';
+  const msg = encodeURIComponent(
+    `Hola! Te escribo desde FeriaVirtual 🎡\n\nSoy ${visitorName} y vi tu stand *${stand.bizName}*.\n\n¿Me podés dar más información sobre tus productos?`
+  );
+  return `https://wa.me/${fullNum}?text=${msg}`;
+}
+
+function renderModalGalleryAndWA(stand) {
+  // Gallery
+  const galleryWrap = document.getElementById('modalGalleryWrap');
+  const galleryEl = document.getElementById('modalGallery');
+  const allPhotos = stand.gallery || [null, null, null, null];
+  const photos = allPhotos.filter(Boolean);
+  if(photos.length > 0) {
+    galleryWrap.style.display = 'block';
+    galleryEl.innerHTML = '';
+    allPhotos.forEach((src, i) => {
+      const div = document.createElement('div');
+      div.className = 'modal-gallery-img' + (src ? '' : ' empty');
+      if(src) {
+        div.innerHTML = `<img src="${src}" alt="Foto ${i+1}">`;
+        const capturedIdx = photos.indexOf(src);
+        div.onclick = () => openLightbox(photos, capturedIdx);
+      } else {
+        div.textContent = '📷';
+      }
+      galleryEl.appendChild(div);
+    });
+  } else {
+    galleryWrap.style.display = 'none';
+  }
+
+  // WhatsApp button
+  const waSection = document.getElementById('modalWaSection');
+  const waUrl = buildWhatsAppURL(stand);
+  if(waUrl) {
+    waSection.innerHTML = `
+      <a href="${waUrl}" target="_blank" class="wa-consult-btn">
+        <span class="wa-icon">💬</span>
+        Consultar al vendedor por WhatsApp
+      </a>
+    `;
+  } else {
+    waSection.innerHTML = `
+      <div class="wa-no-number">
+        <span>📵</span>
+        <span>Este vendedor aún no agregó número de WhatsApp</span>
+      </div>
+    `;
+  }
+}
+
+// ==================== BOOT ====================
+seedDemoStands();
+restoreSession();
+</script>
+</body>
+</html>
